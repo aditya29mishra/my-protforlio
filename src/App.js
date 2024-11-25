@@ -20,22 +20,13 @@ const App = () => {
         <Route path="/browse" element={<Browse />} />
 
         {/* Routes with Layout */}
-        <Route
-          path="*"
-          element={
-            <Layout>
-              <Routes>
-                <Route path="/profile/:profileName" element={<ProfilePage />} />
-                <Route path="/skills" element={<Skills />} />
-                <Route path="/projects" element={<Projects />} />
-                <Route path="/work-experience" element={<WorkExperience />} />
-                <Route path="/contact-me" element={<Contact />} />
-                <Route path="/music" element={<Music />} />
-                <Route path="/reading" element={<Reading />} />
-              </Routes>
-            </Layout>
-          }
-        />
+        <Route path="/profile/:profileName" element={<Layout><ProfilePage /></Layout>} />
+        <Route path="/skills" element={<Layout><Skills /></Layout>} />
+        <Route path="/projects" element={<Layout><Projects /></Layout>} />
+        <Route path="/work-experience" element={<Layout><WorkExperience /></Layout>} />
+        <Route path="/contact-me" element={<Layout><Contact /></Layout>} />
+        <Route path="/music" element={<Layout><Music /></Layout>} />
+        <Route path="/reading" element={<Layout><Reading /></Layout>} />
       </Routes>
     </Router>
   );
