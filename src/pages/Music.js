@@ -1,5 +1,5 @@
 import React from "react";
-import "./Music.css";
+import "../styles/Music.css";
 
 const songs = [
   "https://open.spotify.com/embed/track/5W7DOVGQLTigu09afW7QMT?utm_source=generator",

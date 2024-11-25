@@ -1,5 +1,5 @@
 import React from 'react';
-import './Reading.css';
+import '../styles/Reading.css';
 
 // Book data
 const books = [

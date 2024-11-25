@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import './ProfilePage.css';
+import '../styles/ProfilePage.css';
 
 import ProfileBanner from './ProfileBanner';
 import TopPicksRow from './TopPicksRow';

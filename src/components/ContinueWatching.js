@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './ContinueWatching.css';
+import '../styles/ContinueWatching.css';
 
 const continueWatchingConfig = {
   recruiter: [

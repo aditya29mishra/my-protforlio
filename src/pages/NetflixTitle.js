@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './NetflixTitle.css';
+import '../styles/NetflixTitle.css';
 import netflixSound from '../assets/netflix-sound.mp3';
 import { useNavigate } from 'react-router-dom';
 import logoImage from '../assets/logo-2.png'; // Update with the path to your logo

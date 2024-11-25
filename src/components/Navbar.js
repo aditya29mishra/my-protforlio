@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaBriefcase, FaTools, FaProjectDiagram, FaEnvelope } from 'react-icons/fa'; // Import icons
-import './Navbar.css';
+import { FaHome, FaBriefcase, FaTools, FaProjectDiagram, FaEnvelope, FaCube } from 'react-icons/fa'; // Import icons
+import '../styles/Navbar.css';
 import netflixLogo from '../assets/logo-2.png';
 import blueImage from '../assets/blue.png';
 

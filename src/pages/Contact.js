@@ -1,7 +1,7 @@
 // src/components/Contact.js
 
 import React from 'react';
-import './ContactMe.css';
+import '../styles/ContactMe.css';
 import { FaLinkedin, FaEnvelope, FaPhone, FaCoffee } from 'react-icons/fa';
 import avatar from '../assets/adi-removebg-preview.png';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import './MoreInfoButton.css';
+import '../styles/MoreInfoButton.css';
 
 const MoreInfoButton = ({ onClick, label = "More Info" }) => {
   return (

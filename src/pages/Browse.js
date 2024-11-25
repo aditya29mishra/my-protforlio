@@ -5,7 +5,7 @@ import blueImage from '../assets/blue.png';
 import greyImage from '../assets/grey.png';
 import redImage from '../assets/red.png';
 import yellowImage from '../assets/yellow.png';
-import './browse.css';
+import '../styles/browse.css';
 
 const Browse = () => {
   const navigate = useNavigate();

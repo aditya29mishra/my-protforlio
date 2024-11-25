@@ -1,5 +1,5 @@
 import React from 'react';
-import './Skills.css';
+import '../styles/Skills.css';
 import skillsData from './skillsData';
 import { FaReact, FaNodeJs, FaAws, FaDocker, FaGithub, FaHtml5, FaJs } from 'react-icons/fa';
 import { SiBlender, SiUnity, SiKotlin, SiFirebase, SiAndroid, SiNetlify } from 'react-icons/si';
