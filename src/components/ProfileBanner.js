@@ -32,7 +32,7 @@ const ProfileBanner = () => {
   return (
     <div className="profile-banner">
       <div className="banner-content">
-      <h1 className="banner-headline">Aditya Mishra - Game Developer</h1>
+      <h1 className="banner-headline">Aditya Mishra - Developer</h1>
         <p className="banner-description">
         I am a highly motivated and goal-oriented fresher with expertise in Android, Game, and AR/VR development, seeking opportunities to gain professional experience and contribute to impactful projects. With skills in Kotlin, Unity, C#, and 3D modeling tools like Blender, I have developed scalable Android applications, immersive VR simulations, and engaging multiplayer games as part of my academic and personal projects. My work demonstrates a strong focus on real-time performance optimization, seamless API integration, intuitive UI/UX design, and robust gameplay mechanics. Passionate about learning and problem-solving, I am eager to apply my skills in a professional environment, collaborate with experienced teams, and deliver innovative solutions that push the boundaries of technology.
         </p>

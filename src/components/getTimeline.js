@@ -19,9 +19,10 @@ const timelineData = [
       name: "Aditya Mishra",
       timelineType: "education",
       title: "B.Tech in Computer Science",
-      summaryPoints: "Graduated with distinction in Machine Learning and AI, and contributed to advanced AR/VR projects.",
+      summaryPoints: "Pursuing final year with a strong focus on Machine Learning, AI, and AR/VR projects. Actively involved in hands-on projects and internships to enhance technical and practical knowledge.",
       dateRange: "Aug 2021 - May 2025",
-    },
+    }
+    
   ];
   
   export async function getTimeline() {

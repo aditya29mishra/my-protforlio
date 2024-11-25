@@ -3,6 +3,7 @@
     {
       "target": "temp",
       "public": "build",
+      "cleanUrls": true,
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
@@ -15,6 +16,7 @@
     {
       "target": "am",
       "public": "build",
+      "cleanUrls": true,
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
