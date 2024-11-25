@@ -79,8 +79,7 @@ my-protforlio/
 
 ## Deployment URL
 
-The portfolio is live at:
-[https://myportfolio-31594.web.app/](https://myportfolio-31594.web.app/)
+The portfolio is live at: [https://aditya29mishra.web.app/](https://aditya29mishra.web.app/)
 
 ## Contributions
 

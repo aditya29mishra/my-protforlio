@@ -34,7 +34,7 @@ const Navbar = () => {
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="navbar-left">
           <Link to="/" className="navbar-logo">
-            <img src={netflixLogo} alt="Netflix" />
+            <img src={netflixLogo} alt="Aditya Mishra" />
           </Link>
           <ul className="navbar-links">
             <li><Link to="/browse">Home</Link></li>
