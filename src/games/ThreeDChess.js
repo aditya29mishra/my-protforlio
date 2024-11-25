@@ -30,8 +30,13 @@ const ThreeDChess = () => {
     animate();
 
     return () => {
-      mountRef.current.removeChild(renderer.domElement);
-    };
+        if (mountRef.current) {
+          mountRef.current.removeChild(renderer.domElement);
+        }
+        renderer.dispose();
+        material.dispose();
+        geometry.dispose();
+      };
   }, []);
 
   return <div ref={mountRef}></div>;

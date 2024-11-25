@@ -11,8 +11,11 @@ const ProfilePage = () => {
   const backgroundGif = location.state?.backgroundGif || "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif"; // Default GIF
   const { profileName } = useParams();
 
-  const validProfiles = ['recruiter', 'developer', 'stalker', 'adventure'];
+  const validProfiles = ['recruiter', 'developer', 'stalker', 'adventurer'];
   const profile = validProfiles.includes(profileName) ? profileName : 'recruiter';
+
+  console.log("Profile Name from useParams:", profileName);
+  console.log("Validated Profile:", profile);
 
   return (
     <>
@@ -20,8 +23,7 @@ const ProfilePage = () => {
         className="profile-page"
         style={{ backgroundImage: `url(${backgroundGif})` }}
       >
-        <ProfileBanner
-        />
+        <ProfileBanner />
       </div>
       <TopPicksRow profile={profile} />
       <ContinueWatching profile={profile} />

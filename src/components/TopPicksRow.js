@@ -24,7 +24,7 @@ const topPicksConfig = {
     { title: "Experience", imgSrc: "https://picsum.photos/seed/resume/250/200", route: "/work-experience", icon: <FaBriefcase /> },
     { title: "Let's Play", imgSrc: "https://picsum.photos/seed/shooter/250/200", icon: <FaGamepad />, route: "/game/stalker" },
   ],
-  adventure: [
+  adventurer: [
     { title: "Music", imgSrc: "https://picsum.photos/seed/music/250/200", route: "/music", icon: <FaMusic /> },
     { title: "Projects", imgSrc: "https://picsum.photos/seed/innovation/250/200", route: "/projects", icon: <FaProjectDiagram /> },
     { title: "Reading", imgSrc: "https://picsum.photos/seed/books/250/200", route: "/reading", icon: <FaBook /> },
@@ -35,7 +35,15 @@ const topPicksConfig = {
 
 const TopPicksRow = ({ profile }) => {
   const navigate = useNavigate();
-  const topPicks = topPicksConfig[profile];
+
+  const topPicks = topPicksConfig[profile] || [];
+
+  console.log("Profile in TopPicksRow:", profile);
+
+  if (topPicks.length === 0) {
+    return <div>No recommendations available for this profile.</div>;
+  }
+
 
   return (
     <div className="top-picks-row">

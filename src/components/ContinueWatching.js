@@ -17,7 +17,7 @@ const continueWatchingConfig = {
     { title: "Reading", imgSrc: "https://picsum.photos/id/1026/300/200", link: "/reading" },
     { title: "Contact Me", imgSrc: "https://picsum.photos/id/1029/300/200", link: "/contact-me" }
   ],
-  adventure: [
+  adventurer: [
     { title: "Music", imgSrc: "https://picsum.photos/id/1025/300/200", link: "/music" },
     { title: "Reading", imgSrc: "https://picsum.photos/id/1026/300/200", link: "/reading" },
     { title: "Contact Me", imgSrc: "https://picsum.photos/id/1029/300/200", link: "/contact-me" }
