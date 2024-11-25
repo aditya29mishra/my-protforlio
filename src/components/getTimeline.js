@@ -1,0 +1,32 @@
+const timelineData = [
+    {
+      name: "Aditya Mishra",
+      timelineType: "work",
+      title: "Intern at TIH iHUB Drishti",
+      techStack: "Unity, C#, ARCore, Android SDKs",
+      summaryPoints: "Developed high-performance AR/VR software solutions, optimized real-time performance, and collaborated with interdisciplinary teams for interactive XR experiences.",
+      dateRange: "July 2024 - Sep 2024",
+    },
+    {
+      name: "Aditya Mishra",
+      timelineType: "work",
+      title: "Hackathon Achievements",
+      techStack: "Problem-Solving, AR/VR, Team Collaboration",
+      summaryPoints: "Winner of Kumbh Mela Hackathon (IIITA, 2024), InnoHacks’23 Hackathon, and Innotech’22 KIET annual technical fest.",
+      dateRange: "2022 - 2024",
+    },
+    {
+      name: "Aditya Mishra",
+      timelineType: "education",
+      title: "B.Tech in Computer Science",
+      summaryPoints: "Graduated with distinction in Machine Learning and AI, and contributed to advanced AR/VR projects.",
+      dateRange: "Aug 2021 - May 2025",
+    },
+  ];
+  
+  export async function getTimeline() {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(timelineData), 500); // Simulating an API call with a delay
+    });
+  }
+  

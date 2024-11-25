@@ -1,0 +1,27 @@
+.netflix-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #141414;
+  overflow: hidden;
+}
+
+.netflix-logo {
+  width: 500px;
+  height: auto;
+  opacity: 1; /* Start with visible */
+  transform: scale(1); /* Start with default scale */
+  animation: zoomOut 3s ease-in-out; /* Combine fadeIn and zoomOut into a single animation */
+}
+
+@keyframes zoomOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
