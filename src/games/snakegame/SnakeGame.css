@@ -1,0 +1,93 @@
+/* 🎮 Game Container */
+.game-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: #111; /* Darker background for contrast */
+    color: white;
+    font-family: "Arial", sans-serif;
+  }
+  
+  /* 🏆 Score Display */
+  .score-board {
+    font-size: 22px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.3);
+  }
+  
+  .score-green {
+    color: blue;
+    font-weight: bold;
+  }
+  
+  .score-yellow {
+    color: gold;
+    font-weight: bold;
+  }
+  
+  /* 🎲 Game Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(20, 25px);
+    grid-template-rows: repeat(20, 25px);
+    gap: 1px;
+    background: rgba(0, 255, 0, 0);
+    padding: 10px;
+    border-radius: 12px;
+    /* box-shadow: 0px 0px 20px rgba(255, 0, 0, 0.7);
+    border: 2px solid rgba(255, 0, 0, 0.8); */
+  }
+  
+  
+  /* 🟢 Snake 1 (Green) */
+  .snake1 {
+    background: linear-gradient(135deg, #2f00ffad, #00087f);
+    border-radius: 5px;
+    box-shadow: 0px 0px 6px rgba(98, 0, 255, 0.7);
+  }
+
+  
+  /* 🟡 Snake 2 (Yellow) */
+  .snake2 {
+    background: linear-gradient(135deg, #ffff00, #daa520);
+    border-radius: 5px;
+    box-shadow: 0px 0px 6px rgba(255, 255, 0, 0.7);
+  }
+  
+  /* 🍎 Apple */
+  .apple {
+    background: radial-gradient(circle, rgba(255, 0, 0, 0.295), darkred);
+    border-radius: 20%;
+    box-shadow: 0px 0px 15px rgba(255, 0, 0, 0.9);
+    animation: pulse 1.2s infinite alternate;
+  }
+  
+  /* 🔄 Apple Glow Animation */
+  @keyframes pulse {
+    from {
+      transform: scale(1);
+      box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);
+    }
+    to {
+      transform: scale(1.1);
+      box-shadow: 0px 0px 20px rgba(255, 0, 0, 1);
+    }
+  }
+  
+  /* 🔴 Game Over Message */
+  .game-over {
+    font-size: 28px;
+    font-weight: bold;
+    color: red;
+    margin-top: 10px;
+    text-shadow: 0px 0px 10px rgba(255, 0, 0, 0.8);
+  }
+  

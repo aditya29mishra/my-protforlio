@@ -11,8 +11,9 @@ import Contact from "./pages/Contact";
 import Music from "./pages/Music";
 import Reading from "./pages/Reading";
 
+// Import Games
 import ThreeDChess from "./games/ThreeDChess";
-import MazeRunner from "./games/MazeRunner";
+import SnakeGame from "./games/snakegame/SnakeRaceGame"; // Updated to match correct path
 import VirtualShootingRange from "./games/VirtualShootingRange";
 import SpaceExploration from "./games/SpaceExploration";
 
@@ -34,7 +35,7 @@ const App = () => {
         <Route path="/reading" element={<Layout><Reading /></Layout>} />
 
         {/* Game Routes */}
-        <Route path="/game/recruiter" element={<Layout><MazeRunner /></Layout>} />
+        <Route path="/game/recruiter" element={<Layout><SnakeGame /></Layout>} />
         <Route path="/game/developer" element={<Layout><ThreeDChess /></Layout>} />
         <Route path="/game/stalker" element={<Layout><VirtualShootingRange /></Layout>} />
         <Route path="/game/adventure" element={<Layout><SpaceExploration /></Layout>} />
