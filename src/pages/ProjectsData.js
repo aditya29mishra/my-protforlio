@@ -24,11 +24,29 @@ const projects = [
       image: require("../assets/AM Music.png")
     },
     {
-      title: "AR/VR Development (iHub Drishti)",
-      description: "Engineered AR/VR applications optimized for real-time performance. Created interactive XR components and integrated Android-Unity systems for seamless user experiences.",
-      techUsed: "Unity 3D, C#, Android Studio, ARCore, Blender , VR",
+      title: "IIT jodhpur Navigational Mapping",
+      description: "Developed an AR-based campus navigation system for IIT Jodhpur using Unity, ARCore, and Flutter with Visual-Inertial Odometry, QR code positioning, and NavMesh for precise indoor-outdoor navigation. ",
+      techUsed: "Unity 3D, C#, Android Studio, ARCore, Blender , Flutter , QR code ",
       image: require("../assets/ihub.png")
-    }
+    },
+    {
+      title: "Quiz Game",
+      description: " Developed an interactive 3D quiz game in Unity using C#, Blender, and Firebase, featuring character control systems, OOP-based game logic, real-time database management, and Firebase authentication for secure gameplay experiences. ",
+      techUsed: "Unity 3D, C#, Blender , Firebase , OOPs ",
+      image: require("../assets/quiz_game.jpg")
+    },
+    {
+      title: "Flappy Bird ",
+      description: "Developed a 2D mobile game in Unity using C# with custom physics, touch controls, and game mechanics. Integrated Firebase for user authentication and leaderboard management.",
+      techUsed: "Unity 2D, C#, Firebase, Mobile Development",
+      image: require("../assets/flappy_bird.jpg")
+    },
+    {
+      title: "VR velding Simulator",
+      description: "Designed a virtual reality welding simulator using Unity and Blender, featuring realistic welding mechanics, welding machine controls, and welding environment simulation.",
+      techUsed: "Unity 3D, C#, Blender, VR Development ,XR Interaction Toolkit , OOPs",
+      image: require("../assets/welding_simulator.jpg")
+    },
   ];
   
   export default projects;
