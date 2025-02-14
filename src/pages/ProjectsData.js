@@ -28,25 +28,41 @@ const projects = [
       description: "Developed an AR-based campus navigation system for IIT Jodhpur using Unity, ARCore, and Flutter with Visual-Inertial Odometry, QR code positioning, and NavMesh for precise indoor-outdoor navigation. ",
       techUsed: "Unity 3D, C#, Android Studio, ARCore, Blender , Flutter , QR code ",
       image: require("../assets/ihub.png")
+<<<<<<< HEAD
     },
+=======
+    }
+>>>>>>> 69affc4c202c202797a8561cfd5fc3bf9681a9eb
     {
       title: "Quiz Game",
       description: " Developed an interactive 3D quiz game in Unity using C#, Blender, and Firebase, featuring character control systems, OOP-based game logic, real-time database management, and Firebase authentication for secure gameplay experiences. ",
       techUsed: "Unity 3D, C#, Blender , Firebase , OOPs ",
       image: require("../assets/quiz_game.jpg")
+<<<<<<< HEAD
     },
+=======
+    }
+>>>>>>> 69affc4c202c202797a8561cfd5fc3bf9681a9eb
     {
       title: "Flappy Bird ",
       description: "Developed a 2D mobile game in Unity using C# with custom physics, touch controls, and game mechanics. Integrated Firebase for user authentication and leaderboard management.",
       techUsed: "Unity 2D, C#, Firebase, Mobile Development",
       image: require("../assets/flappy_bird.jpg")
+<<<<<<< HEAD
     },
+=======
+    }
+>>>>>>> 69affc4c202c202797a8561cfd5fc3bf9681a9eb
     {
       title: "VR velding Simulator",
       description: "Designed a virtual reality welding simulator using Unity and Blender, featuring realistic welding mechanics, welding machine controls, and welding environment simulation.",
       techUsed: "Unity 3D, C#, Blender, VR Development ,XR Interaction Toolkit , OOPs",
       image: require("../assets/welding_simulator.jpg")
+<<<<<<< HEAD
     },
+=======
+    }
+>>>>>>> 69affc4c202c202797a8561cfd5fc3bf9681a9eb
   ];
   
   export default projects;
