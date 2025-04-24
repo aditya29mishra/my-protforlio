@@ -2,7 +2,7 @@ const timelineData = [
   {
     name: "ELEKTRO LABs",
     timelineType: "work",
-    titile:"Junior Unity Developer",
+    title:"Junior Unity Developer",
     techStack: "Unity3D, C#, AR/VR/MR",
     summaryPoints: "I create VR training modules for DOJO, including Fire Safety Training, Screwing Process Training, Terminal & Holder Fixing, and PDI Training. My responsibilities include programming, designing training flows, and managing client interactions and deployments.",
     dateRange: "Feb 2025 - Present",
