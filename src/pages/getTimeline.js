@@ -2,10 +2,18 @@ const timelineData = [
   {
     name: "Aditya Mishra",
     timelineType: "work",
+    titile:"junior unity developer at ELEKTRO LABs",
+    techStack: "Unity3D, C#, AR/VR/MR",
+    summaryPoints: "I create VR training modules for DOJO, including Fire Safety Training, Screwing Process Training, Terminal & Holder Fixing, and PDI Training. My responsibilities include programming, designing training flows, and managing client interactions and deployments.",
+    dateRange: "Feb 2025 - Present",
+  },
+  {
+    name: "Aditya Mishra",
+    timelineType: "work",
     title: "Game Devloper Intern at Algovation.in",
     techStack: "Unity3d, C# ",
     summaryPoints: "Developing engaging mobile-based games using Unity3D. Focused on optimizing gameplay mechanics, implementing interactive features, and delivering high-quality gaming experiences tailored for mobile platforms.",
-    dateRange: "Dec 2024 -  Present",
+    dateRange: "Dec 2024 -  JAN 2025",
   },
   {
     name: "Aditya Mishra",
