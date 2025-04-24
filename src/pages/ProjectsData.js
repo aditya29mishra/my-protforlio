@@ -47,6 +47,36 @@ const projects = [
       techUsed: "Unity 3D, C#, Blender, VR Development ,XR Interaction Toolkit , OOPs",
       image: require("../assets/welding_simulator.jpg")
     },
+    {
+      title:"Fire Safety Training",
+      description:"A VR module that simulates emergency fire scenarios, teaching users how to identify hazards, use fire extinguishers, and safely evacuate through guided training steps.",
+      techUsed:"Unity 3D, C#, VR Development ,XR Interaction Toolkit, Scripting",
+      image: require("../assets/fire.jpg")
+    },
+    {
+      title:"Screwing Process Training",
+      description:"An interactive training experience where users learn and perform step-by-step screwing operations using virtual tools in a controlled, immersive environment.",
+      techUsed:"Unity 3D, C#, VR Development ,XR Interaction Toolkit, Scripting",
+      image: require("../assets/screw.jpeg")
+    },
+    {
+      title:"Terminal Fixing",
+      description:"This module trains users on correctly placing and securing terminal components in assemblies processes, ensuring precision and safety during the process.",
+      techUsed:"Unity 3D, C#, VR Development ,XR Interaction Toolkit, Scripting",
+      image: require("../assets/terminal.jpeg")
+    },
+    {
+      title:"Holder Fixing",
+      description:"A VR simulation focused on fixing holders into Workpiece, guiding users through part handling, alignment, and secure fitting procedures.",
+      techUsed:"Unity 3D, C#, VR Development ,XR Interaction Toolkit, Scripting",
+      image: require("../assets/safe.jpeg")
+    },
+    {
+      title:"Pre-Delivery Inspection Training",
+      description:"Covers standard pre-delivery checks through a VR walkthrough—ensuring quality control, functional testing, and defect identification before product delivery.",
+      techUsed:"Unity 3D, C#, VR Development ,XR Interaction Toolkit, Scripting",
+      image: require("../assets/pdi.jpeg")
+    },
   ];
   
   export default projects;
