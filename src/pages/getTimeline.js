@@ -1,22 +1,22 @@
 const timelineData = [
   {
-    name: "Aditya Mishra",
+    name: "ELEKTRO LABs",
     timelineType: "work",
-    titile:"junior unity developer at ELEKTRO LABs",
+    titile:"Junior Unity Developer",
     techStack: "Unity3D, C#, AR/VR/MR",
     summaryPoints: "I create VR training modules for DOJO, including Fire Safety Training, Screwing Process Training, Terminal & Holder Fixing, and PDI Training. My responsibilities include programming, designing training flows, and managing client interactions and deployments.",
     dateRange: "Feb 2025 - Present",
   },
   {
-    name: "Aditya Mishra",
+    name: "Algovation.in",
     timelineType: "work",
-    title: "Game Devloper Intern at Algovation.in",
+    title: "Game Devloper Intern",
     techStack: "Unity3d, C# ",
     summaryPoints: "Developing engaging mobile-based games using Unity3D. Focused on optimizing gameplay mechanics, implementing interactive features, and delivering high-quality gaming experiences tailored for mobile platforms.",
     dateRange: "Dec 2024 -  JAN 2025",
   },
   {
-    name: "Aditya Mishra",
+    name: "IIT Jodhpur",
     timelineType: "work",
     title: "Intern at TIH iHUB Drishti",
     techStack: "Unity, C#, ARCore, Android SDKs",
@@ -32,7 +32,7 @@ const timelineData = [
     dateRange: "2022 - 2024",
   },
   {
-    name: "Aditya Mishra",
+    name: "KIET Gruop of institution",
     timelineType: "education",
     title: "B.Tech in Computer Science",
     summaryPoints: "Pursuing final year with a strong focus on Machine Learning, AI, and AR/VR projects. Actively involved in hands-on projects and internships to enhance technical and practical knowledge.",
