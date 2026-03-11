@@ -1,18 +1,5 @@
 {
   "projects": {
-    "default": "myportfolio-31594"
-  },
-  "targets": {
-    "myportfolio-31594": {
-      "hosting": {
-        "am": [
-          "aditya29mishra"
-        ],
-        "temp": [
-          "myportfolio-31594"
-        ]
-      }
-    }
-  },
-  "etags": {}
+    "default": "aditya29mishra-09"
+  }
 }

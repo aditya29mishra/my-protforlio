@@ -1,32 +1,62 @@
-import React from 'react';
-import projects from './ProjectsData';
-import '../styles/Projects.css';
+import React, { useState } from "react";
+import projects from "./ProjectsData";
+import ProjectPopup from "./ProjectPopup";
+import "../styles/Projects.css";
 
 const Projects = () => {
+
+  const [activeProject,setActiveProject] = useState(null);
+
   return (
+
     <div className="projects-container">
+
       <div className="projects-grid">
-        {projects.map((project, index) => (
+
+        {projects.map((project,index)=>(
+          
           <div
             key={index}
             className="project-card"
-            style={{ '--delay': `${index * 0.1}s` }}
+            tabIndex="0"
+
+            onClick={()=>setActiveProject(project)}
+
+            onKeyDown={(e)=>{
+              if(e.key==="Enter"){
+                setActiveProject(project);
+              }
+            }}
+
           >
-            <img src={project.image} alt={project.title} className="project-image" />
-            <div className="project-details">
-              <h3>{project.title}</h3>
-              <p>{project.description}</p>
-              <div className="tech-used">
-                {project.techUsed.split(', ').map((tech, i) => (
-                  <span key={i} className="tech-badge">{tech}</span>
-                ))}
-              </div>
+
+            <img
+              src={project.image}
+              alt={project.title}
+              className="project-image"
+            />
+
+            <div className="project-title">
+              {project.title}
             </div>
+
           </div>
+
         ))}
+
       </div>
+
+      {activeProject && (
+        <ProjectPopup
+          project={activeProject}
+          close={()=>setActiveProject(null)}
+        />
+      )}
+
     </div>
+
   );
+
 };
 
 export default Projects;
