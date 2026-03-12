@@ -24,10 +24,16 @@
   align-items: center;
 }
 
-.navbar-logo img {
+/* .navbar-logo img {
   height: 30px;
   margin-right: 30px;
   margin-top: 5px;
+
+} */
+ .navbar-logo img{
+  height:30px;
+  width:auto;
+  display:block;
 }
 
 /* Navbar Links */
