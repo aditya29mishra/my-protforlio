@@ -5,19 +5,22 @@ const AdminLogin = lazy(() => import("../pages/AdminLogin"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 
 const AdminRoutes = () => {
+  // IMPORTANT: These paths are RELATIVE to the parent route match in App.js.
+  // App.js matches "/admin/*" and strips "/admin/" before passing the remainder
+  // to this nested <Routes>. So "login" here matches the full URL "/admin/login".
   return (
     <Routes>
-      {/* Default: redirect /admin to /admin/login */}
-      <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+      {/* Default: /admin → redirect to /admin/login */}
+      <Route index element={<Navigate to="login" replace />} />
 
-      {/* Auth entry point */}
-      <Route path="/admin/login" element={<AdminLogin />} />
+      {/* /admin/login */}
+      <Route path="login" element={<AdminLogin />} />
 
-      {/* Protected area (auth guard added in later phase) */}
-      <Route path="/admin/dashboard" element={<Dashboard />} />
+      {/* /admin/dashboard (ProtectedRoute wired in Phase 1F) */}
+      <Route path="dashboard" element={<Dashboard />} />
 
-      {/* Fallback: any unknown /admin/* path → login */}
-      <Route path="/admin/*" element={<Navigate to="/admin/login" replace />} />
+      {/* Catch-all: any unknown /admin/* path → login */}
+      <Route path="*" element={<Navigate to="login" replace />} />
     </Routes>
   );
 };
