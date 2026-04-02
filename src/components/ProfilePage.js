@@ -12,35 +12,47 @@ const DEFAULT_BACKGROUND_GIF = "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I
 const ProfilePage = () => {
   const { profileName } = useParams();
   const { personasData, persona, profile, loading, error } = usePersona(profileName);
-  const backgroundGif = persona?.media.background.url || DEFAULT_BACKGROUND_GIF;
+
+  // Derivations outside of return (using optional chaining)
+  const backgroundGif = persona?.media?.background?.url || DEFAULT_BACKGROUND_GIF;
+  
   const topPicks = useMemo(
     () =>
-      persona?.recommendationGroups.topPicks
-        ? personasData.recommendationGroups.topPicks[
+      persona?.recommendationGroups?.topPicks
+        ? personasData?.recommendationGroups?.topPicks[
             persona.recommendationGroups.topPicks
           ] || []
         : [],
-    [personasData.recommendationGroups.topPicks, persona]
+    [personasData?.recommendationGroups?.topPicks, persona]
   );
+
   const continueWatching = useMemo(
     () =>
-      persona?.recommendationGroups.continueWatching
-        ? personasData.recommendationGroups.continueWatching[
+      persona?.recommendationGroups?.continueWatching
+        ? personasData?.recommendationGroups?.continueWatching[
             persona.recommendationGroups.continueWatching
           ] || []
         : [],
-    [personasData.recommendationGroups.continueWatching, persona]
+    [personasData?.recommendationGroups?.continueWatching, persona]
   );
 
   useEffect(() => {
-    [persona?.media.avatar.url, backgroundGif].filter(Boolean).forEach((imageUrl) => {
-      const image = new Image();
-      image.src = imageUrl;
-    });
+    // Only run side effect if values are available
+    [persona?.media?.avatar?.url, backgroundGif]
+      .filter((url) => typeof url === 'string' && url.length > 0)
+      .forEach((imageUrl) => {
+        const image = new Image();
+        image.src = imageUrl;
+      });
   }, [backgroundGif, persona]);
 
+  // Console log AFTER hooks for debugging
+  console.log('ProfilePage:', { profileName, persona, loading });
+
+  // Early returns (Guards) MUST be after all hook calls
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
+  if (!persona) return <div>{profileName} Profile not found</div>;
 
   return (
     <>
