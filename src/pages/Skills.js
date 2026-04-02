@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import '../styles/Skills.css';
 import { useSkills } from '../hooks/useSkills';
+import { useProgressiveItems } from '../hooks/useProgressiveItems';
 import { FaReact, FaNodeJs, FaAws, FaDocker, FaGithub, FaHtml5, FaJs } from 'react-icons/fa';
 import { SiBlender, SiUnity, SiKotlin, SiFirebase, SiAndroid, SiNetlify } from 'react-icons/si';
 
@@ -27,12 +28,16 @@ const Skills = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
 
+  const visibleSkills = useProgressiveItems(skills, 6, 6);
+
   // Group skills by category
-  const skillsByCategory = skills.reduce((acc, skill) => {
-    if (!acc[skill.category]) acc[skill.category] = [];
-    acc[skill.category].push(skill);
-    return acc;
-  }, {});
+  const skillsByCategory = useMemo(() => {
+    return visibleSkills.reduce((acc, skill) => {
+      if (!acc[skill.category]) acc[skill.category] = [];
+      acc[skill.category].push(skill);
+      return acc;
+    }, {});
+  }, [visibleSkills]);
 
   return (
     <div className="skills-container">
@@ -65,4 +70,4 @@ const Skills = () => {
   );
 };
 
-export default Skills;
+export default memo(Skills);

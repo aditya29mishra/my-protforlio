@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import { MdOutlineWork as WorkIcon } from 'react-icons/md';
@@ -6,6 +6,7 @@ import { IoSchool as SchoolIcon } from 'react-icons/io5';
 import { FaStar as StarIcon } from 'react-icons/fa';
 import '../styles/WorkExperience.css';
 import { useTimeline } from '../hooks/useTimeline';
+import { useProgressiveItems } from '../hooks/useProgressiveItems';
 
 const WorkExperience = () => {
   const { timeline, loading, error } = useTimeline();
@@ -13,13 +14,15 @@ const WorkExperience = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
 
+  const visibleTimeline = useProgressiveItems(timeline, 4, 4);
+
   return (
     <>
       <div className="timeline-container">
         <h2 className="timeline-title">📅 Work Experience & Education Timeline</h2>
       </div>
       <VerticalTimeline>
-        {timeline.map((item, index) => (
+        {visibleTimeline.map((item, index) => (
           <VerticalTimelineElement
             key={index}
             className={`vertical-timeline-element--${item.timelineType}`}
@@ -60,4 +63,4 @@ const WorkExperience = () => {
   );
 };
 
-export default WorkExperience;
+export default memo(WorkExperience);
