@@ -17,7 +17,14 @@ function generateSlug(title) {
 export async function fetchAdminProjects() {
   const { data, error } = await supabase
     .from("projects")
-    .select("id, slug, title, description, image_media_id, github_url, youtube_video_id, status, sort_order, created_at, updated_at")
+    .select(`
+      id, slug, title, description, image_media_id, github_url, youtube_video_id, status, sort_order, created_at, updated_at,
+      media:media (
+        storage_path,
+        storage_bucket,
+        source_type
+      )
+    `)
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
 

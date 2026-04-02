@@ -2,6 +2,8 @@ import React, { memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdAdd, MdEdit, MdDelete, MdOpenInNew } from "react-icons/md";
 import AdminLayout from "../components/AdminLayout";
+import SmartImage from "../../components/SmartImage";
+import { resolveMediaUrl } from "../../services/mediaUtils";
 import { useAdminProjects, useDeleteProject } from "../hooks/useAdminProjects";
 import "../../styles/AdminProjects.css";
 
@@ -86,9 +88,14 @@ const ProjectsPage = () => {
                   <tr key={project.id} className="admin-projects__row">
                     {/* Image thumbnail */}
                     <td className="admin-projects__td">
-                      {project.image_media_id ? (
-                        <div className="admin-projects__thumb" style={{ backgroundColor: "#222", fontSize: "10px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", textOverflow: "ellipsis" }}>
-                          {project.image_media_id.substring(0, 8)}...
+                      {project.media ? (
+                        <div className="admin-projects__thumb" style={{ overflow: "hidden" }}>
+                          <SmartImage
+                            src={resolveMediaUrl(project.media)}
+                            alt={project.title}
+                            className="admin-projects__thumb-img"
+                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                          />
                         </div>
                       ) : (
                         <div className="admin-projects__thumb" aria-label="Project image placeholder" />
