@@ -1,9 +1,9 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MdUpload } from "react-icons/md";
 import AdminLayout from "../components/AdminLayout";
 import UploadModal from "../components/UploadModal";
-import { useCreateProject, useUpdateProject } from "../hooks/useAdminProjects";
+import { useCreateProject, useUpdateProject, useAdminProjects } from "../hooks/useAdminProjects";
 import "../../styles/AdminProjects.css";
 
 // Exact DB schema fields for public.projects (write layer)
@@ -26,6 +26,7 @@ const ProjectForm = () => {
   const navigate = useNavigate();
   const isEditing = Boolean(id);         // /projects/new → no id → create mode
 
+  const { data: projects = [] } = useAdminProjects();
   const createMutation = useCreateProject();
   const updateMutation = useUpdateProject();
   const isSaving = createMutation.isPending || updateMutation.isPending;
@@ -40,6 +41,21 @@ const ProjectForm = () => {
 
   // Seed form with empty state (edit pre-fill comes from backend in Phase 2)
   const [form, setForm] = useState(EMPTY_FORM);
+
+  const existingProject = projects.find(p => p.id === id);
+
+  useEffect(() => {
+    if (existingProject) {
+      setForm({
+        title: existingProject.title || "",
+        description: existingProject.description || "",
+        image_media_id: existingProject.image_media_id || null,
+        github_url: existingProject.github_url || "",
+        youtube_video_id: existingProject.youtube_video_id || "",
+        status: existingProject.status || "draft"
+      });
+    }
+  }, [existingProject]);
 
   const handleMediaSelect = useCallback((media) => {
     setImageMedia(media);
@@ -80,6 +96,14 @@ const ProjectForm = () => {
     },
     [form, isEditing, id, updateMutation, createMutation, navigate]
   );
+
+  if (id && !existingProject) {
+    return (
+      <AdminLayout title="Edit Project">
+        <div style={{ padding: "32px", color: "#888" }}>Loading project data...</div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout title={isEditing ? "Edit Project" : "New Project"}>
