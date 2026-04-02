@@ -1,18 +1,20 @@
-import React, { memo, useCallback, useState, useEffect } from "react";
+import React, { memo, useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../components/AdminLayout";
 import { useCreateTimeline, useUpdateTimeline, useAdminTimeline } from "../hooks/useAdminTimeline";
 import "../../styles/AdminTimeline.css";
 
-// Exact DB schema fields for public.timeline_entries (write layer)
-const EMPTY_FORM = {
-  organization_name: "",
-  entry_type:        "work",    // CHECK (entry_type in ('work', 'education'))
-  role_title:        "",
-  tech_stack:        "",
-  date_range:        "",
-  summary:           "",
-};
+const timelineSchema = z.object({
+  organization_name: z.string().min(1, "Organization Name is required"),
+  entry_type: z.enum(["work", "education"]),
+  role_title: z.string().min(1, "Role and Title is required"),
+  tech_stack: z.string().optional(),
+  date_range: z.string().min(1, "Date Range is required"),
+  summary: z.string().min(10, "Summary must be at least 10 characters"),
+});
 
 const ENTRY_TYPE_OPTIONS = [
   { value: "work",      label: "Work"      },
@@ -33,13 +35,28 @@ const TimelineForm = () => {
     navigate("/admin/timeline");
   }, [navigate]);
 
-  const [form, setForm] = useState(EMPTY_FORM);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(timelineSchema),
+    defaultValues: {
+      organization_name: "",
+      entry_type: "work",
+      role_title: "",
+      tech_stack: "",
+      date_range: "",
+      summary: "",
+    },
+  });
 
   const existingEntry = timeline.find(t => t.id === id);
 
   useEffect(() => {
     if (existingEntry) {
-      setForm({
+      reset({
         organization_name: existingEntry.organization_name || "",
         entry_type:        existingEntry.entry_type || "work",
         role_title:        existingEntry.role_title || "",
@@ -48,18 +65,10 @@ const TimelineForm = () => {
         summary:           existingEntry.summary || "",
       });
     }
-  }, [existingEntry]);
+  }, [existingEntry, reset]);
 
-  const handleChange = useCallback((event) => {
-    const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }, []);
-
-  const handleSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
-
-      const payload = { ...form };
+  const onSubmit = useCallback(
+    (payload) => {
 
       if (isEditing) {
         updateMutation.mutate(
@@ -72,7 +81,7 @@ const TimelineForm = () => {
         });
       }
     },
-    [form, isEditing, id, updateMutation, createMutation, navigate]
+    [isEditing, id, updateMutation, createMutation, navigate]
   );
 
   if (id && !existingEntry) {
@@ -103,7 +112,7 @@ const TimelineForm = () => {
         <form
           id="admin-timeline-form"
           className="admin-timeline-form__body"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
 
@@ -114,15 +123,13 @@ const TimelineForm = () => {
             </label>
             <input
               id="timeline-org"
-              name="organization_name"
               type="text"
-              className="admin-form-field__input"
+              className={`admin-form-field__input ${errors.organization_name ? "admin-form-field__input--error" : ""}`}
               placeholder="e.g. Acme Corp, State University"
-              value={form.organization_name}
-              onChange={handleChange}
-              required
               autoComplete="off"
+              {...register("organization_name")}
             />
+            {errors.organization_name && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.organization_name.message}</span>}
           </div>
 
           {/* Entry Type */}
@@ -132,11 +139,8 @@ const TimelineForm = () => {
             </label>
             <select
               id="timeline-type"
-              name="entry_type"
               className="admin-form-field__select"
-              value={form.entry_type}
-              onChange={handleChange}
-              required
+              {...register("entry_type")}
             >
               {ENTRY_TYPE_OPTIONS.map(({ value, label }) => (
                 <option key={value} value={value}>{label}</option>
@@ -151,15 +155,13 @@ const TimelineForm = () => {
             </label>
             <input
               id="timeline-role"
-              name="role_title"
               type="text"
-              className="admin-form-field__input"
+              className={`admin-form-field__input ${errors.role_title ? "admin-form-field__input--error" : ""}`}
               placeholder="e.g. Frontend Developer, B.Tech Computer Science"
-              value={form.role_title}
-              onChange={handleChange}
-              required
               autoComplete="off"
+              {...register("role_title")}
             />
+            {errors.role_title && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.role_title.message}</span>}
           </div>
 
           {/* Tech Stack */}
@@ -169,14 +171,13 @@ const TimelineForm = () => {
             </label>
             <input
               id="timeline-tech"
-              name="tech_stack"
               type="text"
-              className="admin-form-field__input"
+              className={`admin-form-field__input ${errors.tech_stack ? "admin-form-field__input--error" : ""}`}
               placeholder="e.g. React, Node.js, AWS"
-              value={form.tech_stack}
-              onChange={handleChange}
               autoComplete="off"
+              {...register("tech_stack")}
             />
+            {errors.tech_stack && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.tech_stack.message}</span>}
             <span className="admin-form-field__hint">
               Comma-separated list of technologies used.
             </span>
@@ -189,15 +190,13 @@ const TimelineForm = () => {
             </label>
             <input
               id="timeline-date"
-              name="date_range"
               type="text"
-              className="admin-form-field__input"
+              className={`admin-form-field__input ${errors.date_range ? "admin-form-field__input--error" : ""}`}
               placeholder="e.g. Jan 2022 – Mar 2024"
-              value={form.date_range}
-              onChange={handleChange}
-              required
               autoComplete="off"
+              {...register("date_range")}
             />
+            {errors.date_range && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.date_range.message}</span>}
           </div>
 
           {/* Summary */}
@@ -207,14 +206,12 @@ const TimelineForm = () => {
             </label>
             <textarea
               id="timeline-summary"
-              name="summary"
-              className="admin-form-field__textarea"
+              className={`admin-form-field__textarea ${errors.summary ? "admin-form-field__input--error" : ""}`}
               placeholder="Key responsibilities or achievements..."
-              value={form.summary}
-              onChange={handleChange}
               rows={4}
-              required
+              {...register("summary")}
             />
+            {errors.summary && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.summary.message}</span>}
           </div>
 
           {/* ── Actions ──────────────────────────────────────── */}

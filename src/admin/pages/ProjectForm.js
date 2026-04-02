@@ -1,4 +1,7 @@
 import React, { memo, useCallback, useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { useNavigate, useParams } from "react-router-dom";
 import { MdUpload } from "react-icons/md";
 import AdminLayout from "../components/AdminLayout";
@@ -6,15 +9,14 @@ import UploadModal from "../components/UploadModal";
 import { useCreateProject, useUpdateProject, useAdminProjects } from "../hooks/useAdminProjects";
 import "../../styles/AdminProjects.css";
 
-// Exact DB schema fields for public.projects (write layer)
-const EMPTY_FORM = {
-  title: "",
-  description: "",
-  image_media_id: null,   // resolved in Phase 2 via media upload service
-  github_url: "",
-  youtube_video_id: "",
-  status: "draft",
-};
+const projectSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  github_url: z.string().url("Must be a valid URL").or(z.literal("")),
+  youtube_video_id: z.string().optional(),
+  status: z.enum(["draft", "published"]),
+  image_media_id: z.string().uuid().nullable().optional(),
+});
 
 const STATUS_OPTIONS = [
   { value: "draft",     label: "Draft" },
@@ -27,6 +29,7 @@ const ProjectForm = () => {
   const isEditing = Boolean(id);         // /projects/new → no id → create mode
 
   const { data: projects = [] } = useAdminProjects();
+  const existingProject = projects.find((p) => p.id === id);
   const createMutation = useCreateProject();
   const updateMutation = useUpdateProject();
   const isSaving = createMutation.isPending || updateMutation.isPending;
@@ -39,49 +42,50 @@ const ProjectForm = () => {
     navigate("/admin/projects");
   }, [navigate]);
 
-  // Seed form with empty state (edit pre-fill comes from backend in Phase 2)
-  const [form, setForm] = useState(EMPTY_FORM);
-
-  const existingProject = projects.find(p => p.id === id);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(projectSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      image_media_id: null,
+      github_url: "",
+      youtube_video_id: "",
+      status: "draft",
+    },
+  });
 
   useEffect(() => {
     if (existingProject) {
-      setForm({
+      reset({
         title: existingProject.title || "",
         description: existingProject.description || "",
         image_media_id: existingProject.image_media_id || null,
         github_url: existingProject.github_url || "",
         youtube_video_id: existingProject.youtube_video_id || "",
-        status: existingProject.status || "draft"
+        status: existingProject.status || "draft",
       });
+      if (existingProject.media) {
+        setImageMedia({ id: existingProject.image_media_id, url: existingProject.media.storage_path }); 
+      }
     }
-  }, [existingProject]);
+  }, [existingProject, reset]);
 
-  const handleMediaSelect = useCallback((media) => {
-    setImageMedia(media);
-    setForm((prev) => ({
-      ...prev,
-      image_media_id: media.id,
-    }));
-  }, []);
+  const handleMediaSelect = useCallback(
+    (media) => {
+      setImageMedia(media);
+      setValue("image_media_id", media.id, { shouldValidate: true });
+    },
+    [setValue]
+  );
 
-  const handleChange = useCallback((event) => {
-    const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }, []);
-
-  const handleSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
-
-      const payload = {
-        title: form.title,
-        description: form.description,
-        image_media_id: form.image_media_id,
-        github_url: form.github_url,
-        youtube_video_id: form.youtube_video_id,
-        status: form.status,
-      };
+  const onSubmit = useCallback(
+    (payload) => {
 
       if (isEditing) {
         updateMutation.mutate(
@@ -94,7 +98,7 @@ const ProjectForm = () => {
         });
       }
     },
-    [form, isEditing, id, updateMutation, createMutation, navigate]
+    [isEditing, id, updateMutation, createMutation, navigate]
   );
 
   if (id && !existingProject) {
@@ -125,7 +129,7 @@ const ProjectForm = () => {
         <form
           id="admin-project-form"
           className="admin-project-form__body"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
 
@@ -136,15 +140,13 @@ const ProjectForm = () => {
             </label>
             <input
               id="project-title"
-              name="title"
               type="text"
-              className="admin-form-field__input"
+              className={`admin-form-field__input ${errors.title ? "admin-form-field__input--error" : ""}`}
               placeholder="e.g. Portfolio Website"
-              value={form.title}
-              onChange={handleChange}
-              required
               autoComplete="off"
+              {...register("title")}
             />
+            {errors.title && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.title.message}</span>}
           </div>
 
           {/* Description */}
@@ -154,14 +156,12 @@ const ProjectForm = () => {
             </label>
             <textarea
               id="project-description"
-              name="description"
-              className="admin-form-field__textarea"
+              className={`admin-form-field__textarea ${errors.description ? "admin-form-field__input--error" : ""}`}
               placeholder="Brief description of the project..."
-              value={form.description}
-              onChange={handleChange}
               rows={4}
-              required
+              {...register("description")}
             />
+            {errors.description && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.description.message}</span>}
           </div>
 
           {/* Image Upload Zone */}
@@ -195,14 +195,13 @@ const ProjectForm = () => {
             </label>
             <input
               id="project-github"
-              name="github_url"
               type="url"
-              className="admin-form-field__input"
+              className={`admin-form-field__input ${errors.github_url ? "admin-form-field__input--error" : ""}`}
               placeholder="https://github.com/username/repo"
-              value={form.github_url}
-              onChange={handleChange}
               autoComplete="off"
+              {...register("github_url")}
             />
+            {errors.github_url && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.github_url.message}</span>}
           </div>
 
           {/* YouTube Video ID */}
@@ -212,13 +211,11 @@ const ProjectForm = () => {
             </label>
             <input
               id="project-youtube"
-              name="youtube_video_id"
               type="text"
               className="admin-form-field__input"
               placeholder="e.g. dQw4w9WgXcQ"
-              value={form.youtube_video_id}
-              onChange={handleChange}
               autoComplete="off"
+              {...register("youtube_video_id")}
             />
             <span className="admin-form-field__hint">
               The ID from youtube.com/watch?v=<strong>[ID]</strong>
@@ -232,11 +229,8 @@ const ProjectForm = () => {
             </label>
             <select
               id="project-status"
-              name="status"
               className="admin-form-field__select"
-              value={form.status}
-              onChange={handleChange}
-              required
+              {...register("status")}
             >
               {STATUS_OPTIONS.map(({ value, label }) => (
                 <option key={value} value={value}>{label}</option>
@@ -271,8 +265,8 @@ const ProjectForm = () => {
         isOpen={isUploadOpen}
         onClose={() => setIsUploadOpen(false)}
         onSelect={handleMediaSelect}
-        prefix={`projects/${form.title ? form.title.toLowerCase().replace(/[^a-z0-9]/g, "-") : "untitled"}`}
-        defaultLabel={form.title || "Project Image"}
+        prefix="projects/media"
+        defaultLabel="Project Image"
       />
     </AdminLayout>
   );

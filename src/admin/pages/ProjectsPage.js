@@ -5,6 +5,7 @@ import AdminLayout from "../components/AdminLayout";
 import SmartImage from "../../components/SmartImage";
 import { resolveMediaUrl } from "../../services/mediaUtils";
 import { useAdminProjects, useDeleteProject } from "../hooks/useAdminProjects";
+import { toast } from "react-hot-toast";
 import "../../styles/AdminProjects.css";
 
 const StatusBadge = memo(({ status }) => (
@@ -30,9 +31,28 @@ const ProjectsPage = () => {
   );
 
   const handleDelete = useCallback((id) => {
-    if (window.confirm("Are you sure you want to delete this project?")) {
-      deleteMutation.mutate(id);
-    }
+    toast((t) => (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <span>Are you sure you want to delete this project?</span>
+        <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+          <button 
+            onClick={() => {
+              deleteMutation.mutate(id);
+              toast.dismiss(t.id);
+            }}
+            style={{ padding: '4px 8px', background: '#ff4444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+          >
+            Confirm
+          </button>
+          <button 
+            onClick={() => toast.dismiss(t.id)}
+            style={{ padding: '4px 8px', background: '#333', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: 5000 });
   }, [deleteMutation]);
 
   if (isLoading) {

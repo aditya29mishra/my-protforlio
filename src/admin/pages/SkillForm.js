@@ -1,16 +1,18 @@
-import React, { memo, useCallback, useState, useEffect } from "react";
+import React, { memo, useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../components/AdminLayout";
 import { useCreateSkill, useUpdateSkill, useAdminSkills } from "../hooks/useAdminSkills";
 import "../../styles/AdminSkills.css";
 
-// Exact DB schema fields for public.skills (write layer)
-const EMPTY_FORM = {
-  name:        "",
-  category:    "",
-  description: "",
-  icon_key:    "",
-};
+const skillSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  category: z.string().min(1, "Category is required"),
+  description: z.string().min(5, "Description must be at least 5 characters"),
+  icon_key: z.string().min(1, "Icon Key is required"),
+});
 
 const SkillForm = () => {
   const { id }   = useParams();
@@ -26,31 +28,36 @@ const SkillForm = () => {
     navigate("/admin/skills");
   }, [navigate]);
 
-  const [form, setForm] = useState(EMPTY_FORM);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(skillSchema),
+    defaultValues: {
+      name: "",
+      category: "",
+      description: "",
+      icon_key: "",
+    },
+  });
 
   const existingSkill = skills.find(s => s.id === id);
 
   useEffect(() => {
     if (existingSkill) {
-      setForm({
+      reset({
         name: existingSkill.name || "",
         category: existingSkill.category || "",
         description: existingSkill.description || "",
         icon_key: existingSkill.icon_key || "",
       });
     }
-  }, [existingSkill]);
+  }, [existingSkill, reset]);
 
-  const handleChange = useCallback((event) => {
-    const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }, []);
-
-  const handleSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
-      
-      const payload = { ...form };
+  const onSubmit = useCallback(
+    (payload) => {
 
       if (isEditing) {
         updateMutation.mutate(
@@ -63,7 +70,7 @@ const SkillForm = () => {
         });
       }
     },
-    [form, isEditing, id, updateMutation, createMutation, navigate]
+    [isEditing, id, updateMutation, createMutation, navigate]
   );
 
   if (id && !existingSkill) {
@@ -94,7 +101,7 @@ const SkillForm = () => {
         <form
           id="admin-skill-form"
           className="admin-skill-form__body"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
 
@@ -105,15 +112,13 @@ const SkillForm = () => {
             </label>
             <input
               id="skill-name"
-              name="name"
               type="text"
-              className="admin-form-field__input"
+              className={`admin-form-field__input ${errors.name ? "admin-form-field__input--error" : ""}`}
               placeholder="e.g. React"
-              value={form.name}
-              onChange={handleChange}
-              required
               autoComplete="off"
+              {...register("name")}
             />
+            {errors.name && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.name.message}</span>}
           </div>
 
           {/* Category */}
@@ -123,15 +128,13 @@ const SkillForm = () => {
             </label>
             <input
               id="skill-category"
-              name="category"
               type="text"
-              className="admin-form-field__input"
+              className={`admin-form-field__input ${errors.category ? "admin-form-field__input--error" : ""}`}
               placeholder="e.g. Frontend, Backend, Cloud, 3D"
-              value={form.category}
-              onChange={handleChange}
-              required
               autoComplete="off"
+              {...register("category")}
             />
+            {errors.category && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.category.message}</span>}
             <span className="admin-form-field__hint">
               Used to group skills on the public page.
             </span>
@@ -144,14 +147,12 @@ const SkillForm = () => {
             </label>
             <textarea
               id="skill-description"
-              name="description"
-              className="admin-form-field__textarea"
+              className={`admin-form-field__textarea ${errors.description ? "admin-form-field__input--error" : ""}`}
               placeholder="Brief description of this skill..."
-              value={form.description}
-              onChange={handleChange}
               rows={3}
-              required
+              {...register("description")}
             />
+            {errors.description && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.description.message}</span>}
           </div>
 
           {/* Icon Key */}
@@ -161,15 +162,13 @@ const SkillForm = () => {
             </label>
             <input
               id="skill-icon-key"
-              name="icon_key"
               type="text"
-              className="admin-form-field__input"
+              className={`admin-form-field__input ${errors.icon_key ? "admin-form-field__input--error" : ""}`}
               placeholder="e.g. FaReact, FaNodeJs, SiBlender"
-              value={form.icon_key}
-              onChange={handleChange}
-              required
               autoComplete="off"
+              {...register("icon_key")}
             />
+            {errors.icon_key && <span style={{ color: "#ff4444", fontSize: "12px", marginTop: "4px" }}>{errors.icon_key.message}</span>}
             <span className="admin-form-field__hint">
               Must match a key in the public icon map (react-icons).
             </span>
