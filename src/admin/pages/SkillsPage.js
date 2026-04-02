@@ -2,18 +2,13 @@ import React, { memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdAdd, MdEdit, MdDelete } from "react-icons/md";
 import AdminLayout from "../components/AdminLayout";
+import { useAdminSkills, useDeleteSkill } from "../hooks/useAdminSkills";
 import "../../styles/AdminSkills.css";
-
-// Placeholder rows — replaced by real data once hooks are wired (Phase 2)
-const PLACEHOLDER_ROWS = [
-  { id: "1", name: "React",      category: "Frontend",  icon_key: "FaReact"  },
-  { id: "2", name: "Node.js",    category: "Backend",   icon_key: "FaNodeJs" },
-  { id: "3", name: "AWS",        category: "Cloud",     icon_key: "FaAws"    },
-  { id: "4", name: "Blender",    category: "3D",        icon_key: "SiBlender"},
-];
 
 const SkillsPage = () => {
   const navigate = useNavigate();
+  const { data: skills = [], isLoading } = useAdminSkills();
+  const deleteMutation = useDeleteSkill();
 
   const handleCreateNew = useCallback(() => {
     navigate("/admin/skills/new");
@@ -25,6 +20,20 @@ const SkillsPage = () => {
     },
     [navigate]
   );
+  
+  const handleDelete = useCallback((id) => {
+    if (window.confirm("Are you sure you want to delete this skill?")) {
+      deleteMutation.mutate(id);
+    }
+  }, [deleteMutation]);
+
+  if (isLoading) {
+    return (
+      <AdminLayout title="Skills">
+        <div style={{ padding: "32px", color: "#888" }}>Loading skills...</div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout title="Skills">
@@ -59,43 +68,51 @@ const SkillsPage = () => {
               </tr>
             </thead>
             <tbody>
-              {PLACEHOLDER_ROWS.map((skill) => (
-                <tr key={skill.id} className="admin-skills__row">
-
-                  <td className="admin-skills__td">
-                    <span className="admin-skills__name">{skill.name}</span>
+              {!skills.length ? (
+                <tr>
+                  <td colSpan="4" style={{ padding: "24px", textAlign: "center", color: "#666" }}>
+                    No skills found
                   </td>
-
-                  <td className="admin-skills__td">
-                    <span className="admin-skills__category-badge">
-                      {skill.category}
-                    </span>
-                  </td>
-
-                  <td className="admin-skills__td">
-                    <code className="admin-skills__icon-key">{skill.icon_key}</code>
-                  </td>
-
-                  <td className="admin-skills__td admin-skills__td--actions">
-                    <button
-                      type="button"
-                      className="admin-icon-btn admin-icon-btn--edit"
-                      onClick={() => handleEdit(skill.id)}
-                      aria-label={`Edit ${skill.name}`}
-                    >
-                      <MdEdit aria-hidden="true" />
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-icon-btn admin-icon-btn--delete"
-                      aria-label={`Delete ${skill.name}`}
-                    >
-                      <MdDelete aria-hidden="true" />
-                    </button>
-                  </td>
-
                 </tr>
-              ))}
+              ) : (
+                skills.map((skill) => (
+                  <tr key={skill.id} className="admin-skills__row">
+                    <td className="admin-skills__td">
+                      <span className="admin-skills__name">{skill.name}</span>
+                    </td>
+
+                    <td className="admin-skills__td">
+                      <span className="admin-skills__category-badge">
+                        {skill.category}
+                      </span>
+                    </td>
+
+                    <td className="admin-skills__td">
+                      <code className="admin-skills__icon-key">{skill.icon_key}</code>
+                    </td>
+
+                    <td className="admin-skills__td admin-skills__td--actions">
+                      <button
+                        type="button"
+                        className="admin-icon-btn admin-icon-btn--edit"
+                        onClick={() => handleEdit(skill.id)}
+                        aria-label={`Edit ${skill.name}`}
+                      >
+                        <MdEdit aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-icon-btn admin-icon-btn--delete"
+                        onClick={() => handleDelete(skill.id)}
+                        aria-label={`Delete ${skill.name}`}
+                        disabled={deleteMutation.isPending}
+                      >
+                        <MdDelete aria-hidden="true" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

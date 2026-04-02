@@ -2,32 +2,8 @@ import React, { memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdAdd, MdEdit, MdDelete } from "react-icons/md";
 import AdminLayout from "../components/AdminLayout";
+import { useAdminTimeline, useDeleteTimeline } from "../hooks/useAdminTimeline";
 import "../../styles/AdminTimeline.css";
-
-// Placeholder rows — replaced by real data once hooks are wired (Phase 2)
-const PLACEHOLDER_ROWS = [
-  {
-    id: "1",
-    organization_name: "Acme Corp",
-    role_title: "Frontend Developer",
-    date_range: "2023 – Present",
-    entry_type: "work",
-  },
-  {
-    id: "2",
-    organization_name: "State University",
-    role_title: "B.Tech Computer Science",
-    date_range: "2019 – 2023",
-    entry_type: "education",
-  },
-  {
-    id: "3",
-    organization_name: "Startup Inc.",
-    role_title: "Intern – Full Stack",
-    date_range: "2022 – 2022",
-    entry_type: "work",
-  },
-];
 
 const EntryTypeBadge = memo(({ type }) => (
   <span className={`admin-timeline__badge admin-timeline__badge--${type}`}>
@@ -37,6 +13,8 @@ const EntryTypeBadge = memo(({ type }) => (
 
 const TimelinePage = () => {
   const navigate = useNavigate();
+  const { data: timeline = [], isLoading } = useAdminTimeline();
+  const deleteMutation = useDeleteTimeline();
 
   const handleCreateNew = useCallback(() => {
     navigate("/admin/timeline/new");
@@ -48,6 +26,20 @@ const TimelinePage = () => {
     },
     [navigate]
   );
+
+  const handleDelete = useCallback((id) => {
+    if (window.confirm("Are you sure you want to delete this entry?")) {
+      deleteMutation.mutate(id);
+    }
+  }, [deleteMutation]);
+
+  if (isLoading) {
+    return (
+      <AdminLayout title="Timeline">
+        <div style={{ padding: "32px", color: "#888" }}>Loading timeline...</div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout title="Timeline">
@@ -83,45 +75,53 @@ const TimelinePage = () => {
               </tr>
             </thead>
             <tbody>
-              {PLACEHOLDER_ROWS.map((entry) => (
-                <tr key={entry.id} className="admin-timeline__row">
-
-                  <td className="admin-timeline__td">
-                    <span className="admin-timeline__org">{entry.organization_name}</span>
+              {!timeline.length ? (
+                <tr>
+                  <td colSpan="5" style={{ padding: "24px", textAlign: "center", color: "#666" }}>
+                    No entries found
                   </td>
-
-                  <td className="admin-timeline__td">
-                    <span className="admin-timeline__role">{entry.role_title}</span>
-                  </td>
-
-                  <td className="admin-timeline__td">
-                    <span className="admin-timeline__date">{entry.date_range}</span>
-                  </td>
-
-                  <td className="admin-timeline__td">
-                    <EntryTypeBadge type={entry.entry_type} />
-                  </td>
-
-                  <td className="admin-timeline__td admin-timeline__td--actions">
-                    <button
-                      type="button"
-                      className="admin-icon-btn admin-icon-btn--edit"
-                      onClick={() => handleEdit(entry.id)}
-                      aria-label={`Edit ${entry.organization_name}`}
-                    >
-                      <MdEdit aria-hidden="true" />
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-icon-btn admin-icon-btn--delete"
-                      aria-label={`Delete ${entry.organization_name}`}
-                    >
-                      <MdDelete aria-hidden="true" />
-                    </button>
-                  </td>
-
                 </tr>
-              ))}
+              ) : (
+                timeline.map((entry) => (
+                  <tr key={entry.id} className="admin-timeline__row">
+                    <td className="admin-timeline__td">
+                      <span className="admin-timeline__org">{entry.organization_name}</span>
+                    </td>
+
+                    <td className="admin-timeline__td">
+                      <span className="admin-timeline__role">{entry.role_title}</span>
+                    </td>
+
+                    <td className="admin-timeline__td">
+                      <span className="admin-timeline__date">{entry.date_range}</span>
+                    </td>
+
+                    <td className="admin-timeline__td">
+                      <EntryTypeBadge type={entry.entry_type} />
+                    </td>
+
+                    <td className="admin-timeline__td admin-timeline__td--actions">
+                      <button
+                        type="button"
+                        className="admin-icon-btn admin-icon-btn--edit"
+                        onClick={() => handleEdit(entry.id)}
+                        aria-label={`Edit ${entry.organization_name}`}
+                      >
+                        <MdEdit aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-icon-btn admin-icon-btn--delete"
+                        onClick={() => handleDelete(entry.id)}
+                        aria-label={`Delete ${entry.organization_name}`}
+                        disabled={deleteMutation.isPending}
+                      >
+                        <MdDelete aria-hidden="true" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

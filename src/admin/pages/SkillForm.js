@@ -1,6 +1,7 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../components/AdminLayout";
+import { useCreateSkill, useUpdateSkill, useAdminSkills } from "../hooks/useAdminSkills";
 import "../../styles/AdminSkills.css";
 
 // Exact DB schema fields for public.skills (write layer)
@@ -16,11 +17,29 @@ const SkillForm = () => {
   const navigate = useNavigate();
   const isEditing = Boolean(id);
 
+  const { data: skills = [] } = useAdminSkills();
+  const createMutation = useCreateSkill();
+  const updateMutation = useUpdateSkill();
+  const isSaving = createMutation.isPending || updateMutation.isPending;
+
   const handleCancel = useCallback(() => {
     navigate("/admin/skills");
   }, [navigate]);
 
   const [form, setForm] = useState(EMPTY_FORM);
+
+  const existingSkill = skills.find(s => s.id === id);
+
+  useEffect(() => {
+    if (existingSkill) {
+      setForm({
+        name: existingSkill.name || "",
+        category: existingSkill.category || "",
+        description: existingSkill.description || "",
+        icon_key: existingSkill.icon_key || "",
+      });
+    }
+  }, [existingSkill]);
 
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
@@ -30,11 +49,30 @@ const SkillForm = () => {
   const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
-      // Phase 2: call createSkill / updateSkill from admin service here
-      console.log("Skill form submitted", form);
+      
+      const payload = { ...form };
+
+      if (isEditing) {
+        updateMutation.mutate(
+          { id, skillData: payload },
+          { onSuccess: () => navigate("/admin/skills") }
+        );
+      } else {
+        createMutation.mutate(payload, {
+          onSuccess: () => navigate("/admin/skills")
+        });
+      }
     },
-    [form]
+    [form, isEditing, id, updateMutation, createMutation, navigate]
   );
+
+  if (id && !existingSkill) {
+    return (
+      <AdminLayout title="Edit Skill">
+        <div style={{ padding: "32px", color: "#888" }}>Loading skill data...</div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout title={isEditing ? "Edit Skill" : "New Skill"}>
@@ -143,8 +181,9 @@ const SkillForm = () => {
               id="admin-skill-save-btn"
               type="submit"
               className="admin-btn admin-btn--primary"
+              disabled={isSaving}
             >
-              {isEditing ? "Save Changes" : "Add Skill"}
+              {isSaving ? "Saving..." : (isEditing ? "Save Changes" : "Add Skill")}
             </button>
             <button
               id="admin-skill-cancel-btn"

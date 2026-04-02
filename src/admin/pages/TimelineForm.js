@@ -1,6 +1,7 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../components/AdminLayout";
+import { useCreateTimeline, useUpdateTimeline, useAdminTimeline } from "../hooks/useAdminTimeline";
 import "../../styles/AdminTimeline.css";
 
 // Exact DB schema fields for public.timeline_entries (write layer)
@@ -23,11 +24,31 @@ const TimelineForm = () => {
   const navigate  = useNavigate();
   const isEditing = Boolean(id);
 
+  const { data: timeline = [] } = useAdminTimeline();
+  const createMutation = useCreateTimeline();
+  const updateMutation = useUpdateTimeline();
+  const isSaving = createMutation.isPending || updateMutation.isPending;
+
   const handleCancel = useCallback(() => {
     navigate("/admin/timeline");
   }, [navigate]);
 
   const [form, setForm] = useState(EMPTY_FORM);
+
+  const existingEntry = timeline.find(t => t.id === id);
+
+  useEffect(() => {
+    if (existingEntry) {
+      setForm({
+        organization_name: existingEntry.organization_name || "",
+        entry_type:        existingEntry.entry_type || "work",
+        role_title:        existingEntry.role_title || "",
+        tech_stack:        existingEntry.tech_stack || "",
+        date_range:        existingEntry.date_range || "",
+        summary:           existingEntry.summary || "",
+      });
+    }
+  }, [existingEntry]);
 
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
@@ -37,11 +58,30 @@ const TimelineForm = () => {
   const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
-      // Phase 2: call createTimelineEntry / updateTimelineEntry from admin service here
-      console.log("Timeline form submitted", form);
+
+      const payload = { ...form };
+
+      if (isEditing) {
+        updateMutation.mutate(
+          { id, timelineData: payload },
+          { onSuccess: () => navigate("/admin/timeline") }
+        );
+      } else {
+        createMutation.mutate(payload, {
+          onSuccess: () => navigate("/admin/timeline")
+        });
+      }
     },
-    [form]
+    [form, isEditing, id, updateMutation, createMutation, navigate]
   );
+
+  if (id && !existingEntry) {
+    return (
+      <AdminLayout title="Edit Entry">
+        <div style={{ padding: "32px", color: "#888" }}>Loading entry data...</div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout title={isEditing ? "Edit Entry" : "New Entry"}>
@@ -183,8 +223,9 @@ const TimelineForm = () => {
               id="admin-timeline-save-btn"
               type="submit"
               className="admin-btn admin-btn--primary"
+              disabled={isSaving}
             >
-              {isEditing ? "Save Changes" : "Add Entry"}
+              {isSaving ? "Saving..." : (isEditing ? "Save Changes" : "Add Entry")}
             </button>
             <button
               id="admin-timeline-cancel-btn"
