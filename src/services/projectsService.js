@@ -1,7 +1,8 @@
 import { supabase } from "./supabaseClient";
-import { resolveMediaUrl } from "./mediaUtils";
+import { normalizeStorageMedia, resolveMediaUrl } from "./mediaUtils";
 
 function mapProjectRecord(project) {
+  const media = normalizeStorageMedia(project.media);
   const tags = [...(project.project_skill_tags || [])].sort(
     (left, right) => (left.sort_order || 0) - (right.sort_order || 0)
   );
@@ -15,7 +16,7 @@ function mapProjectRecord(project) {
       .map((tag) => tag.label || tag.skill?.name)
       .filter(Boolean)
       .join(", "),
-    image: resolveMediaUrl(project.media),
+    image: resolveMediaUrl(media),
     github: project.github_url,
     video: project.youtube_video_id,
   };

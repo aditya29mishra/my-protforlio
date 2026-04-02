@@ -1,37 +1,21 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { TEN_MINUTES, THIRTY_MINUTES } from "../lib/queryClient";
 import { fetchMusicContent } from "../services/contentService";
 
+const musicQueryOptions = {
+  queryKey: ["content", "music"],
+  queryFn: fetchMusicContent,
+  staleTime: TEN_MINUTES,
+  gcTime: THIRTY_MINUTES,
+};
+
 export function useMusicContent() {
-  const [songs, setSongs] = useState([]);
-  const [collections, setCollections] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, isLoading, error } = useQuery(musicQueryOptions);
 
-  useEffect(() => {
-    let isActive = true;
-
-    fetchMusicContent()
-      .then((data) => {
-        if (isActive) {
-          setSongs(data.songs);
-          setCollections(data.collections);
-        }
-      })
-      .catch((err) => {
-        if (isActive) {
-          setError(err);
-        }
-      })
-      .finally(() => {
-        if (isActive) {
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isActive = false;
-    };
-  }, []);
-
-  return { songs, collections, loading, error };
+  return {
+    songs: data?.songs || [],
+    collections: data?.collections || [],
+    loading: isLoading,
+    error,
+  };
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import SmartImage from "../components/SmartImage";
 import "../styles/ProjectPopup.css";
 
 const ProjectPopup = ({ project, close }) => {
@@ -47,9 +48,12 @@ const ProjectPopup = ({ project, close }) => {
         <div className="popup-banner">
 
           {!showVideo && (
-            <img
+            <SmartImage
               src={project.image}
               alt={project.title}
+              wrapperClassName="popup-banner-image"
+              style={{ width: "100%", height: "100%" }}
+              priority
             />
           )}
 

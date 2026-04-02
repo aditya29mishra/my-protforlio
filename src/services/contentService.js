@@ -1,5 +1,5 @@
 import { supabase } from "./supabaseClient";
-import { resolveMediaUrl } from "./mediaUtils";
+import { normalizeStorageMedia, resolveMediaUrl } from "./mediaUtils";
 
 function mapMusicItem(item) {
   if (item.item_type === "song") {
@@ -65,7 +65,7 @@ export async function fetchReadingContent() {
     title: item.title,
     author: item.subtitle,
     description: item.description,
-    image: resolveMediaUrl(item.media),
+    image: resolveMediaUrl(normalizeStorageMedia(item.media)),
     alt: item.media?.alt_text || item.title,
   }));
 }

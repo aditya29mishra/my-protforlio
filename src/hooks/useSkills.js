@@ -1,35 +1,16 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { TEN_MINUTES, THIRTY_MINUTES } from "../lib/queryClient";
 import { fetchSkills } from "../services/skillsService";
 
+export const skillsQueryOptions = {
+  queryKey: ["skills"],
+  queryFn: fetchSkills,
+  staleTime: TEN_MINUTES,
+  gcTime: THIRTY_MINUTES,
+};
+
 export function useSkills() {
-  const [skills, setSkills] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, isLoading, error } = useQuery(skillsQueryOptions);
 
-  useEffect(() => {
-    let isActive = true;
-
-    fetchSkills()
-      .then((data) => {
-        if (isActive) {
-          setSkills(data);
-        }
-      })
-      .catch((err) => {
-        if (isActive) {
-          setError(err);
-        }
-      })
-      .finally(() => {
-        if (isActive) {
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isActive = false;
-    };
-  }, []);
-
-  return { skills, loading, error };
+  return { skills: data || [], loading: isLoading, error };
 }

@@ -1,10 +1,12 @@
 import { supabase } from "./supabaseClient";
-import { resolveMediaUrl } from "./mediaUtils";
+import { normalizeStorageMedia, resolveMediaUrl } from "./mediaUtils";
 
 function mapMedia(media) {
+  const optimizedMedia = normalizeStorageMedia(media);
+
   return {
-    type: media?.source_type || null,
-    url: resolveMediaUrl(media),
+    type: optimizedMedia?.source_type || null,
+    url: resolveMediaUrl(optimizedMedia),
   };
 }
 

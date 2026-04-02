@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { TEN_MINUTES, THIRTY_MINUTES } from "../lib/queryClient";
 import { fetchPersonas } from "../services/personaService";
 
 const EMPTY_PERSONA_DATA = {
@@ -11,37 +12,21 @@ const EMPTY_PERSONA_DATA = {
 
 const DEFAULT_PROFILE = "recruiter";
 
+export const personasQueryOptions = {
+  queryKey: ["personas"],
+  queryFn: fetchPersonas,
+  staleTime: TEN_MINUTES,
+  gcTime: THIRTY_MINUTES,
+};
+
 export function usePersona(profileName) {
-  const [personasData, setPersonasData] = useState(EMPTY_PERSONA_DATA);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    data = EMPTY_PERSONA_DATA,
+    isLoading,
+    error,
+  } = useQuery(personasQueryOptions);
 
-  useEffect(() => {
-    let isActive = true;
-
-    fetchPersonas()
-      .then((data) => {
-        if (isActive) {
-          setPersonasData(data);
-        }
-      })
-      .catch((err) => {
-        if (isActive) {
-          setError(err);
-        }
-      })
-      .finally(() => {
-        if (isActive) {
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isActive = false;
-    };
-  }, []);
-
-  const personas = personasData.personas;
+  const personas = data.personas;
   const validProfiles = personas.map((persona) => persona.slug);
   const profile = validProfiles.includes(profileName)
     ? profileName
@@ -49,5 +34,12 @@ export function usePersona(profileName) {
   const persona =
     personas.find((entry) => entry.slug === profile) || personas[0] || null;
 
-  return { personasData, personas, persona, profile, loading, error };
+  return {
+    personasData: data,
+    personas,
+    persona,
+    profile,
+    loading: isLoading,
+    error,
+  };
 }

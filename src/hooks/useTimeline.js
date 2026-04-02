@@ -1,35 +1,16 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { TEN_MINUTES, THIRTY_MINUTES } from "../lib/queryClient";
 import { fetchTimeline } from "../services/timelineService";
 
+export const timelineQueryOptions = {
+  queryKey: ["timeline"],
+  queryFn: fetchTimeline,
+  staleTime: TEN_MINUTES,
+  gcTime: THIRTY_MINUTES,
+};
+
 export function useTimeline() {
-  const [timeline, setTimeline] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, isLoading, error } = useQuery(timelineQueryOptions);
 
-  useEffect(() => {
-    let isActive = true;
-
-    fetchTimeline()
-      .then((data) => {
-        if (isActive) {
-          setTimeline(data);
-        }
-      })
-      .catch((err) => {
-        if (isActive) {
-          setError(err);
-        }
-      })
-      .finally(() => {
-        if (isActive) {
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isActive = false;
-    };
-  }, []);
-
-  return { timeline, loading, error };
+  return { timeline: data || [], loading: isLoading, error };
 }

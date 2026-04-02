@@ -1,35 +1,16 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { TEN_MINUTES, THIRTY_MINUTES } from "../lib/queryClient";
 import { fetchReadingContent } from "../services/contentService";
 
+const readingQueryOptions = {
+  queryKey: ["content", "reading"],
+  queryFn: fetchReadingContent,
+  staleTime: TEN_MINUTES,
+  gcTime: THIRTY_MINUTES,
+};
+
 export function useReadingContent() {
-  const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, isLoading, error } = useQuery(readingQueryOptions);
 
-  useEffect(() => {
-    let isActive = true;
-
-    fetchReadingContent()
-      .then((data) => {
-        if (isActive) {
-          setBooks(data);
-        }
-      })
-      .catch((err) => {
-        if (isActive) {
-          setError(err);
-        }
-      })
-      .finally(() => {
-        if (isActive) {
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isActive = false;
-    };
-  }, []);
-
-  return { books, loading, error };
+  return { books: data || [], loading: isLoading, error };
 }

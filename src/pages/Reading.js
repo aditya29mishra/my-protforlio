@@ -1,9 +1,12 @@
 import React from 'react';
+import SmartImage from '../components/SmartImage';
+import { useProgressiveItems } from '../hooks/useProgressiveItems';
 import '../styles/Reading.css';
 import { useReadingContent } from '../hooks/useReadingContent';
 
 const Reading = () => {
   const { books, loading, error } = useReadingContent();
+  const visibleBooks = useProgressiveItems(books, 6, 6);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
@@ -14,9 +17,14 @@ const Reading = () => {
       <p className="reading-intro">Dive into some of the best books across genres and languages.</p>
 
       <div className="books-grid">
-        {books.map((book, index) => (
+        {visibleBooks.map((book, index) => (
           <div key={book.slug || index} className="book-card">
-            <img src={book.image} alt={book.alt} className="book-cover" loading="lazy" />
+            <SmartImage
+              src={book.image}
+              alt={book.alt}
+              className="book-cover"
+              style={{ width: '100%', height: '300px' }}
+            />
             <div className="book-info">
               <h2 className="book-title">{book.title}</h2>
               <p className="book-author">{book.author}</p>

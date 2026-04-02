@@ -1,35 +1,16 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { TEN_MINUTES, THIRTY_MINUTES } from "../lib/queryClient";
 import { fetchProjects } from "../services/projectsService";
 
+export const projectsQueryOptions = {
+  queryKey: ["projects"],
+  queryFn: fetchProjects,
+  staleTime: TEN_MINUTES,
+  gcTime: THIRTY_MINUTES,
+};
+
 export function useProjects() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, isLoading, error } = useQuery(projectsQueryOptions);
 
-  useEffect(() => {
-    let isActive = true;
-
-    fetchProjects()
-      .then((data) => {
-        if (isActive) {
-          setProjects(data);
-        }
-      })
-      .catch((err) => {
-        if (isActive) {
-          setError(err);
-        }
-      })
-      .finally(() => {
-        if (isActive) {
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isActive = false;
-    };
-  }, []);
-
-  return { projects, loading, error };
+  return { projects: data || [], loading: isLoading, error };
 }

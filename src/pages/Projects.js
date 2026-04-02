@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { useProjects } from "../hooks/useProjects";
+import { useProgressiveItems } from "../hooks/useProgressiveItems";
 import ProjectPopup from "./ProjectPopup";
+import SmartImage from "../components/SmartImage";
 import "../styles/Projects.css";
 
 const Projects = () => {
 
   const [activeProject,setActiveProject] = useState(null);
   const { projects, loading, error } = useProjects();
+  const visibleProjects = useProgressiveItems(projects, 6, 6);
 
   if (loading) return <div>Loading projects...</div>;
   if (error) return <div>Error loading projects</div>;
@@ -17,7 +20,7 @@ const Projects = () => {
 
       <div className="projects-grid">
 
-        {projects.map((project,index)=>(
+        {visibleProjects.map((project,index)=>(
           
           <div
             key={project.id || project.slug || index}
@@ -34,11 +37,12 @@ const Projects = () => {
 
           >
 
-            <img
+            <SmartImage
               src={project.image}
               alt={project.title}
               className="project-image"
-              loading="lazy"
+              aspectRatio="16 / 9"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
 
             <div className="project-title">
