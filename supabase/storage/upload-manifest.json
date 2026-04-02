@@ -1,0 +1,230 @@
+[
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/+1Dimension.png",
+    "storagePath": "assets/+1Dimension.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/A Song of Ice and Fire.jpg",
+    "storagePath": "assets/A Song of Ice and Fire.jpg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/adi-removebg-preview.png",
+    "storagePath": "assets/adi-removebg-preview.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/aditya_blender.pdf",
+    "storagePath": "assets/aditya_blender.pdf",
+    "contentType": "application/pdf"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/aditya_resume_main.pdf",
+    "storagePath": "assets/aditya_resume_main.pdf",
+    "contentType": "application/pdf"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/AM Music.png",
+    "storagePath": "assets/AM Music.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/atomicHabits.jpg",
+    "storagePath": "assets/atomicHabits.jpg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/blue.png",
+    "storagePath": "assets/blue.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/chess.png",
+    "storagePath": "assets/chess.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/crane.jpg",
+    "storagePath": "assets/crane.jpg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/die_casting.png",
+    "storagePath": "assets/die_casting.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/driving.png",
+    "storagePath": "assets/driving.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/fire.jpg",
+    "storagePath": "assets/fire.jpg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/flappy_bird.jpg",
+    "storagePath": "assets/flappy_bird.jpg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/grey.png",
+    "storagePath": "assets/grey.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/Harry Potter.jpg",
+    "storagePath": "assets/Harry Potter.jpg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/ihub.png",
+    "storagePath": "assets/ihub.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/lathe.png",
+    "storagePath": "assets/lathe.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/leakage_testing.png",
+    "storagePath": "assets/leakage_testing.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/logo-2.png",
+    "storagePath": "assets/logo-2.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/mr_electronics.png",
+    "storagePath": "assets/mr_electronics.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/netflix-sound.mp3",
+    "storagePath": "assets/netflix-sound.mp3",
+    "contentType": "audio/mpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/painting.png",
+    "storagePath": "assets/painting.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/pdi.jpeg",
+    "storagePath": "assets/pdi.jpeg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/pdi.png",
+    "storagePath": "assets/pdi.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/plugin.png",
+    "storagePath": "assets/plugin.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/Profile.pdf",
+    "storagePath": "assets/Profile.pdf",
+    "contentType": "application/pdf"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/quiz_game.jpg",
+    "storagePath": "assets/quiz_game.jpg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/red.png",
+    "storagePath": "assets/red.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/richDadPoorDad.jpg",
+    "storagePath": "assets/richDadPoorDad.jpg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/safe.jpeg",
+    "storagePath": "assets/safe.jpeg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/screw.jpeg",
+    "storagePath": "assets/screw.jpeg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/tagoreHostel.png",
+    "storagePath": "assets/tagoreHostel.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/terminal.jpeg",
+    "storagePath": "assets/terminal.jpeg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/vmc.png",
+    "storagePath": "assets/vmc.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/welding_advanced.png",
+    "storagePath": "assets/welding_advanced.png",
+    "contentType": "image/png"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/welding_simulator.jpg",
+    "storagePath": "assets/welding_simulator.jpg",
+    "contentType": "image/jpeg"
+  },
+  {
+    "bucket": "portfolio-public",
+    "localPath": "src/assets/yellow.png",
+    "storagePath": "assets/yellow.png",
+    "contentType": "image/png"
+  }
+]
