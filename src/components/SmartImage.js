@@ -1,7 +1,42 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import "../styles/SmartImage.css";
 
 const seenSources = new Set();
+const sharedObservers = new Map();
+const observerListeners = new WeakMap();
+
+function getSharedObserver(rootMargin) {
+  if (sharedObservers.has(rootMargin)) {
+    return sharedObservers.get(rootMargin);
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        const listener = observerListeners.get(entry.target);
+
+        if (listener) {
+          listener();
+        }
+      });
+    },
+    { rootMargin }
+  );
+
+  sharedObservers.set(rootMargin, observer);
+
+  return observer;
+}
 
 const SmartImage = ({
   src,
@@ -15,13 +50,22 @@ const SmartImage = ({
   sizes,
 }) => {
   const wrapperRef = useRef(null);
+  const latestSourceRef = useRef(src);
   const [shouldLoad, setShouldLoad] = useState(priority || seenSources.has(src));
   const [isLoaded, setIsLoaded] = useState(seenSources.has(src));
+
+  useEffect(() => {
+    latestSourceRef.current = src;
+  }, [src]);
 
   useEffect(() => {
     setShouldLoad(priority || seenSources.has(src));
     setIsLoaded(seenSources.has(src));
   }, [priority, src]);
+
+  const activateLoading = useCallback(() => {
+    setShouldLoad(true);
+  }, []);
 
   useEffect(() => {
     if (!src || shouldLoad || priority) {
@@ -35,36 +79,28 @@ const SmartImage = ({
       return undefined;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShouldLoad(true);
-            observer.disconnect();
-          }
-        });
-      },
-      { rootMargin }
-    );
+    const observer = getSharedObserver(rootMargin);
+    observerListeners.set(target, activateLoading);
 
     observer.observe(target);
 
     return () => {
-      observer.disconnect();
+      observer.unobserve(target);
+      observerListeners.delete(target);
     };
-  }, [priority, rootMargin, shouldLoad, src]);
+  }, [activateLoading, priority, rootMargin, shouldLoad, src]);
 
-  const handleLoad = () => {
-    if (src) {
-      seenSources.add(src);
+  const handleLoad = useCallback(() => {
+    if (latestSourceRef.current) {
+      seenSources.add(latestSourceRef.current);
     }
 
     setIsLoaded(true);
-  };
+  }, []);
 
   const wrapperStyle = {
     ...style,
-    ...(aspectRatio ? { aspectRatio } : {}),
+    ...(aspectRatio ? { "--smart-image-aspect-ratio": aspectRatio } : {}),
   };
 
   return (
@@ -93,4 +129,4 @@ const SmartImage = ({
   );
 };
 
-export default SmartImage;
+export default memo(SmartImage);

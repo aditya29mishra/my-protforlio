@@ -20,6 +20,8 @@
   overflow:hidden;
   cursor:pointer;
   transition:transform .35s ease, box-shadow .35s ease;
+  transform:translateZ(0);
+  will-change:transform, box-shadow;
 }
 
 .project-card:hover{

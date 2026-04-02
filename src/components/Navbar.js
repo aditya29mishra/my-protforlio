@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaHome, FaBriefcase, FaTools, FaProjectDiagram, FaEnvelope } from 'react-icons/fa'; // Import icons
 import '../styles/Navbar.css';
@@ -29,6 +29,10 @@ const Navbar = () => {
     setIsSidebarOpen(false);
   };
 
+  const handleProfileNavigate = useCallback(() => {
+    navigate('/browse');
+  }, [navigate]);
+
   return (
     <>
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
@@ -51,7 +55,7 @@ const Navbar = () => {
             <div></div>
             <div></div>
           </div>
-          <img src={profileImage} alt="Profile" className="profile-icon" onClick={() => { navigate('/browse') }} />
+          <img src={profileImage} alt="Profile" className="profile-icon" onClick={handleProfileNavigate} />
         </div>
       </nav>
 

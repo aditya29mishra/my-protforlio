@@ -38,6 +38,8 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   animation: popUp 2s ease forwards;
+  transform: translateZ(0);
+  will-change: transform, box-shadow;
 }
 
 .book-card:hover {

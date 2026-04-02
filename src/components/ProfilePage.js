@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styles/ProfilePage.css';
 import { usePersona } from '../hooks/usePersona';
@@ -12,17 +12,35 @@ const DEFAULT_BACKGROUND_GIF = "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I
 const ProfilePage = () => {
   const { profileName } = useParams();
   const { personasData, persona, profile, loading, error } = usePersona(profileName);
+  const backgroundGif = persona?.media.background.url || DEFAULT_BACKGROUND_GIF;
+  const topPicks = useMemo(
+    () =>
+      persona?.recommendationGroups.topPicks
+        ? personasData.recommendationGroups.topPicks[
+            persona.recommendationGroups.topPicks
+          ] || []
+        : [],
+    [personasData.recommendationGroups.topPicks, persona]
+  );
+  const continueWatching = useMemo(
+    () =>
+      persona?.recommendationGroups.continueWatching
+        ? personasData.recommendationGroups.continueWatching[
+            persona.recommendationGroups.continueWatching
+          ] || []
+        : [],
+    [personasData.recommendationGroups.continueWatching, persona]
+  );
+
+  useEffect(() => {
+    [persona?.media.avatar.url, backgroundGif].filter(Boolean).forEach((imageUrl) => {
+      const image = new Image();
+      image.src = imageUrl;
+    });
+  }, [backgroundGif, persona]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
-
-  const backgroundGif = persona?.media.background.url || DEFAULT_BACKGROUND_GIF;
-  const topPicks = persona?.recommendationGroups.topPicks
-    ? personasData.recommendationGroups.topPicks[persona.recommendationGroups.topPicks] || []
-    : [];
-  const continueWatching = persona?.recommendationGroups.continueWatching
-    ? personasData.recommendationGroups.continueWatching[persona.recommendationGroups.continueWatching] || []
-    : [];
 
   return (
     <>
@@ -38,4 +56,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default memo(ProfilePage);

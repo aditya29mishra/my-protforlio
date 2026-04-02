@@ -10,6 +10,8 @@
   text-decoration: none;
   width: 10vw;
   border-radius: 5rem;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .profile-card:hover {
@@ -29,6 +31,7 @@
   overflow: hidden;
   border-radius: 0.5rem;
   border: 0.2em solid transparent;
+  aspect-ratio: 1 / 1;
 }
 
 .image-container:hover {

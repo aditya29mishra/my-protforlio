@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import SmartImage from "../components/SmartImage";
 import "../styles/ProjectPopup.css";
 
 const ProjectPopup = ({ project, close }) => {
 
   const [showVideo,setShowVideo] = useState(false);
+  const handlePlayVideo = useCallback(() => {
+    window.open(
+      `https://youtube.com/watch?v=${project.video}`,
+      "_blank"
+    );
+  }, [project.video]);
 
   useEffect(()=>{
 
@@ -78,10 +84,7 @@ const ProjectPopup = ({ project, close }) => {
               {project.video && (
                 <button
                   className="play-button"
-                  onClick={()=>window.open(
-                    `https://youtube.com/watch?v=${project.video}`,
-                    "_blank"
-                  )}
+                  onClick={handlePlayVideo}
                 >
                   ▶ Play
                 </button>

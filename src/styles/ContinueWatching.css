@@ -33,6 +33,8 @@
   border-radius: 5px;
   overflow: hidden;
   transition: transform 0.3s ease;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .pick-card:hover {
@@ -58,6 +60,7 @@
   align-items: center;
   opacity: 1;
   transition: opacity 0.3s ease;
+  will-change: opacity;
 }
 
 .pick-card:hover .overlay {

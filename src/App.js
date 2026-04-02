@@ -1,4 +1,5 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -17,9 +18,72 @@ const SnakeGame = lazy(() => import("./games/snakegame/SnakeRaceGame"));
 const VirtualShootingRange = lazy(() => import("./games/VirtualShootingRange"));
 const SpaceExploration = lazy(() => import("./games/SpaceExploration"));
 
+const FallbackUI = () => <div>Something went wrong.</div>;
+
+const AppWarmup = () => {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    let isActive = true;
+
+    const loadPrimaryData = async () => {
+      const [{ personasQueryOptions }, { projectsQueryOptions }] =
+        await Promise.all([
+          import("./hooks/usePersona"),
+          import("./hooks/useProjects"),
+        ]);
+
+      if (!isActive) {
+        return;
+      }
+
+      queryClient.prefetchQuery(personasQueryOptions);
+      queryClient.prefetchQuery(projectsQueryOptions);
+    };
+
+    const loadSecondaryData = async () => {
+      const [{ skillsQueryOptions }, { timelineQueryOptions }] =
+        await Promise.all([
+          import("./hooks/useSkills"),
+          import("./hooks/useTimeline"),
+        ]);
+
+      if (!isActive) {
+        return;
+      }
+
+      queryClient.prefetchQuery(skillsQueryOptions);
+      queryClient.prefetchQuery(timelineQueryOptions);
+    };
+
+    loadPrimaryData();
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      const idleId = window.requestIdleCallback(loadSecondaryData, {
+        timeout: 600,
+      });
+
+      return () => {
+        isActive = false;
+        window.cancelIdleCallback(idleId);
+      };
+    }
+
+    const timeoutId = window.setTimeout(loadSecondaryData, 120);
+
+    return () => {
+      isActive = false;
+      window.clearTimeout(timeoutId);
+    };
+  }, [queryClient]);
+
+  return null;
+};
+
 const App = () => {
   return (
-    <ErrorBoundary>
+    <ErrorBoundary fallback={<FallbackUI />}>
+      <AppWarmup />
       <Router>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>

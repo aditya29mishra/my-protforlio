@@ -1,8 +1,11 @@
 .smart-image {
   position: relative;
   display: block;
+  width: 100%;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.08);
+  aspect-ratio: var(--smart-image-aspect-ratio, auto);
+  contain: paint;
 }
 
 .smart-image__skeleton {
@@ -24,13 +27,14 @@
   display: block;
   object-fit: cover;
   opacity: 0;
-  transform: scale(1.02);
+  transform: translateZ(0) scale(1.02);
   transition: opacity 0.35s ease, transform 0.35s ease;
+  will-change: transform, opacity;
 }
 
 .smart-image--loaded .smart-image__img {
   opacity: 1;
-  transform: scale(1);
+  transform: translateZ(0) scale(1);
 }
 
 .smart-image--loaded .smart-image__skeleton {
