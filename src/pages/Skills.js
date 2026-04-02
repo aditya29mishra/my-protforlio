@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/Skills.css';
-import skillsData from './skillsData';
+import { useSkills } from '../hooks/useSkills';
 import { FaReact, FaNodeJs, FaAws, FaDocker, FaGithub, FaHtml5, FaJs } from 'react-icons/fa';
 import { SiBlender, SiUnity, SiKotlin, SiFirebase, SiAndroid, SiNetlify } from 'react-icons/si';
 
@@ -22,8 +22,13 @@ const iconMap = {
 };
 
 const Skills = () => {
+  const { skills, loading, error } = useSkills();
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
+
   // Group skills by category
-  const skillsByCategory = skillsData.reduce((acc, skill) => {
+  const skillsByCategory = skills.reduce((acc, skill) => {
     if (!acc[skill.category]) acc[skill.category] = [];
     acc[skill.category].push(skill);
     return acc;

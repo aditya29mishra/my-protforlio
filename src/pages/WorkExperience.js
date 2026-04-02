@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import { MdOutlineWork as WorkIcon } from 'react-icons/md';
 import { IoSchool as SchoolIcon } from 'react-icons/io5';
 import { FaStar as StarIcon } from 'react-icons/fa';
 import '../styles/WorkExperience.css';
-import { getTimeline } from './getTimeline';
+import { useTimeline } from '../hooks/useTimeline';
 
 const WorkExperience = () => {
-  const [timelineData, setTimelineData] = useState(null);
+  const { timeline, loading, error } = useTimeline();
 
-  useEffect(() => {
-    async function fetchTimeline() {
-      const data = await getTimeline();
-      setTimelineData(data);
-    }
-    fetchTimeline();
-  }, []);
-
-  if (!timelineData) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
 
   return (
     <>
@@ -26,7 +19,7 @@ const WorkExperience = () => {
         <h2 className="timeline-title">📅 Work Experience & Education Timeline</h2>
       </div>
       <VerticalTimeline>
-        {timelineData.map((item, index) => (
+        {timeline.map((item, index) => (
           <VerticalTimelineElement
             key={index}
             className={`vertical-timeline-element--${item.timelineType}`}
