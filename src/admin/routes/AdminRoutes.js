@@ -1,8 +1,10 @@
 import React, { lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-const AdminLogin = lazy(() => import("../pages/AdminLogin"));
-const Dashboard = lazy(() => import("../pages/Dashboard"));
+const AdminLogin   = lazy(() => import("../pages/AdminLogin"));
+const Dashboard    = lazy(() => import("../pages/Dashboard"));
+const ProjectsPage = lazy(() => import("../pages/ProjectsPage"));
+const ProjectForm  = lazy(() => import("../pages/ProjectForm"));
 
 const AdminRoutes = () => {
   // IMPORTANT: These paths are RELATIVE to the parent route match in App.js.
@@ -18,6 +20,11 @@ const AdminRoutes = () => {
 
       {/* /admin/dashboard (ProtectedRoute wired in Phase 1F) */}
       <Route path="dashboard" element={<Dashboard />} />
+
+      {/* ── Projects module ──────────────────────────────── */}
+      <Route path="projects"     element={<ProjectsPage />} />
+      <Route path="projects/new" element={<ProjectForm />} />
+      <Route path="projects/:id" element={<ProjectForm />} />
 
       {/* Catch-all: any unknown /admin/* path → login */}
       <Route path="*" element={<Navigate to="login" replace />} />

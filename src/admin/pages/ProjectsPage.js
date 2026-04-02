@@ -1,4 +1,5 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { MdAdd, MdEdit, MdDelete, MdOpenInNew } from "react-icons/md";
 import AdminLayout from "../components/AdminLayout";
 import "../../styles/AdminProjects.css";
@@ -31,7 +32,19 @@ const StatusBadge = memo(({ status }) => (
   </span>
 ));
 
-const ProjectsPage = ({ onEdit, onCreateNew }) => {
+const ProjectsPage = () => {
+  const navigate = useNavigate();
+
+  const handleCreateNew = useCallback(() => {
+    navigate("/admin/projects/new");
+  }, [navigate]);
+
+  const handleEdit = useCallback(
+    (projectId) => {
+      navigate(`/admin/projects/${projectId}`);
+    },
+    [navigate]
+  );
   return (
     <AdminLayout title="Projects">
       <div className="admin-projects">
@@ -46,7 +59,7 @@ const ProjectsPage = ({ onEdit, onCreateNew }) => {
             id="admin-create-project-btn"
             type="button"
             className="admin-btn admin-btn--primary"
-            onClick={onCreateNew}
+            onClick={handleCreateNew}
           >
             <MdAdd aria-hidden="true" />
             Create Project
@@ -111,7 +124,7 @@ const ProjectsPage = ({ onEdit, onCreateNew }) => {
                     <button
                       type="button"
                       className="admin-icon-btn admin-icon-btn--edit"
-                      onClick={() => onEdit(project)}
+                      onClick={() => handleEdit(project.id)}
                       aria-label={`Edit ${project.title}`}
                     >
                       <MdEdit aria-hidden="true" />

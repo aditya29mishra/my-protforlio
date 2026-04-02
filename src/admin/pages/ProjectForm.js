@@ -1,4 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { MdUpload } from "react-icons/md";
 import AdminLayout from "../components/AdminLayout";
 import "../../styles/AdminProjects.css";
@@ -18,22 +19,17 @@ const STATUS_OPTIONS = [
   { value: "published", label: "Published" },
 ];
 
-const ProjectForm = ({ project = null, onCancel }) => {
-  const isEditing = project !== null;
+const ProjectForm = () => {
+  const { id } = useParams();            // present on /admin/projects/:id
+  const navigate = useNavigate();
+  const isEditing = Boolean(id);         // /projects/new → no id → create mode
 
-  // Seed form with existing project data when editing
-  const [form, setForm] = useState(() =>
-    isEditing
-      ? {
-          title: project.title ?? "",
-          description: project.description ?? "",
-          image_media_id: project.image_media_id ?? null,
-          github_url: project.github_url ?? "",
-          youtube_video_id: project.youtube_video_id ?? "",
-          status: project.status ?? "draft",
-        }
-      : EMPTY_FORM
-  );
+  const handleCancel = useCallback(() => {
+    navigate("/admin/projects");
+  }, [navigate]);
+
+  // Seed form with empty state (edit pre-fill comes from backend in Phase 2)
+  const [form, setForm] = useState(EMPTY_FORM);
 
   const handleChange = useCallback((event) => {
     const { name, value } = event.target;
@@ -193,7 +189,7 @@ const ProjectForm = ({ project = null, onCancel }) => {
               id="admin-project-cancel-btn"
               type="button"
               className="admin-btn admin-btn--secondary"
-              onClick={onCancel}
+              onClick={handleCancel}
             >
               Cancel
             </button>
