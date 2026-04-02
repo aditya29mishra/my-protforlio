@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 import {
   fetchAdminProjects,
   createAdminProject,
@@ -27,9 +28,25 @@ export function useCreateProject() {
 
   return useMutation({
     mutationFn: (projectData) => createAdminProject(projectData),
-    onSuccess: () => {
+    onMutate: async (newProject) => {
+      await queryClient.cancelQueries({ queryKey: ADMIN_PROJECTS_KEY });
+      const previousProjects = queryClient.getQueryData(ADMIN_PROJECTS_KEY);
+      queryClient.setQueryData(ADMIN_PROJECTS_KEY, (old) => {
+        if (!old) return [{ ...newProject, id: `temp-${Date.now()}` }];
+        return [...old, { ...newProject, id: `temp-${Date.now()}` }];
+      });
+      return { previousProjects };
+    },
+    onError: (error, newProject, context) => {
+      queryClient.setQueryData(ADMIN_PROJECTS_KEY, context.previousProjects);
+      toast.error("Failed to create project");
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ADMIN_PROJECTS_KEY });
     },
+    onSuccess: () => {
+      toast.success("Project created successfully");
+    }
   });
 }
 
@@ -42,9 +59,25 @@ export function useUpdateProject() {
 
   return useMutation({
     mutationFn: ({ id, projectData }) => updateAdminProject(id, projectData),
-    onSuccess: () => {
+    onMutate: async ({ id, projectData }) => {
+      await queryClient.cancelQueries({ queryKey: ADMIN_PROJECTS_KEY });
+      const previousProjects = queryClient.getQueryData(ADMIN_PROJECTS_KEY);
+      queryClient.setQueryData(ADMIN_PROJECTS_KEY, (old) => {
+        if (!old) return old;
+        return old.map(p => p.id === id ? { ...p, ...projectData } : p);
+      });
+      return { previousProjects };
+    },
+    onError: (error, variables, context) => {
+      queryClient.setQueryData(ADMIN_PROJECTS_KEY, context.previousProjects);
+      toast.error("Failed to update project");
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ADMIN_PROJECTS_KEY });
     },
+    onSuccess: () => {
+      toast.success("Project updated successfully");
+    }
   });
 }
 
@@ -57,8 +90,24 @@ export function useDeleteProject() {
 
   return useMutation({
     mutationFn: (id) => deleteAdminProject(id),
-    onSuccess: () => {
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ADMIN_PROJECTS_KEY });
+      const previousProjects = queryClient.getQueryData(ADMIN_PROJECTS_KEY);
+      queryClient.setQueryData(ADMIN_PROJECTS_KEY, (old) => {
+        if (!old) return old;
+        return old.filter(p => p.id !== id);
+      });
+      return { previousProjects };
+    },
+    onError: (error, variables, context) => {
+      queryClient.setQueryData(ADMIN_PROJECTS_KEY, context.previousProjects);
+      toast.error("Failed to delete project");
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ADMIN_PROJECTS_KEY });
     },
+    onSuccess: () => {
+      toast.success("Project deleted successfully");
+    }
   });
 }
