@@ -32,8 +32,9 @@ const TopPicksRow = ({ profile, picks = [] }) => {
             src={pick.media.url}
             alt={pick.title}
             className="pick-image"
-            aspectRatio="5 / 4"
-            sizes="250px"
+            aspectRatio="16 / 9"
+            sizes="(max-width: 768px) 100vw, 30vw"
+            priority={index < 3}
           />
           <div className="overlay">
             <div className="pick-label">{pick.title}</div>
