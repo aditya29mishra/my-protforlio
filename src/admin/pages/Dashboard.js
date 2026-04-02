@@ -1,4 +1,5 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   MdFolderOpen,
   MdBuild,
@@ -43,6 +44,12 @@ const QUICK_LINKS = [
 ];
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = useCallback(
+    (to) => () => navigate(to),
+    [navigate]
+  );
   return (
     <AdminLayout title="Dashboard">
       <div className="admin-dashboard">
@@ -79,12 +86,18 @@ const Dashboard = () => {
         <section className="admin-dashboard__section">
           <h3 className="admin-dashboard__section-title">Quick Access</h3>
           <div className="admin-dashboard__quick-grid">
-            {QUICK_LINKS.map(({ label, to, description }) => (
-              <div key={to} className="admin-dashboard__quick-card">
+                      {QUICK_LINKS.map(({ label, to, description }) => (
+              <button
+                key={to}
+                type="button"
+                className="admin-dashboard__quick-card"
+                onClick={handleNavigate(to)}
+                aria-label={`Go to ${label}`}
+              >
                 <span className="admin-dashboard__quick-label">{label}</span>
                 <span className="admin-dashboard__quick-desc">{description}</span>
                 <span className="admin-dashboard__quick-arrow" aria-hidden="true">→</span>
-              </div>
+              </button>
             ))}
           </div>
         </section>

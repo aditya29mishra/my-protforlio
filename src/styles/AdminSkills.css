@@ -1,0 +1,140 @@
+/* ═══════════════════════════════════════════════════════════
+   ADMIN SKILLS MODULE
+   admin-skills__* | admin-skill-form__*
+   Shared: admin-btn | admin-icon-btn | admin-form-field__*
+═══════════════════════════════════════════════════════════ */
+
+/* ─── Shared Button System ──────────────────────────────────── */
+
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.1s ease, opacity 0.1s ease;
+  white-space: nowrap;
+}
+.admin-btn--primary  { background-color: #e50914; color: #ffffff; }
+.admin-btn--primary:hover { background-color: #f6121d; }
+.admin-btn--primary:active { opacity: 0.85; }
+.admin-btn--secondary { background-color: #1e1e1e; color: #a0a0a0; border: 1px solid #2a2a2a; }
+.admin-btn--secondary:hover { background-color: #242424; color: #cccccc; }
+
+/* ─── Icon Action Buttons ───────────────────────────────────── */
+
+.admin-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 6px;
+  border: none; background: none; cursor: pointer; font-size: 16px;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+.admin-icon-btn--edit   { color: #888888; }
+.admin-icon-btn--edit:hover { background-color: #1e1e1e; color: #ffffff; }
+.admin-icon-btn--delete { color: #5a5a5a; }
+.admin-icon-btn--delete:hover { background-color: #2a1515; color: #e05050; }
+
+/* ─── Form Field System ─────────────────────────────────────── */
+
+.admin-form-field { display: flex; flex-direction: column; gap: 6px; }
+.admin-form-field__label {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase; color: #7a7a7a;
+}
+.admin-form-field__required { color: #e50914; margin-left: 2px; }
+.admin-form-field__input,
+.admin-form-field__textarea,
+.admin-form-field__select {
+  width: 100%; padding: 9px 13px;
+  background-color: #111111; border: 1px solid #272727; border-radius: 7px;
+  color: #e0e0e0; font-family: inherit; font-size: 13px;
+  outline: none; transition: border-color 0.12s ease;
+}
+.admin-form-field__input::placeholder,
+.admin-form-field__textarea::placeholder { color: #3a3a3a; }
+.admin-form-field__input:focus,
+.admin-form-field__textarea:focus,
+.admin-form-field__select:focus { border-color: #e50914; }
+.admin-form-field__textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.admin-form-field__select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  padding-right: 32px; cursor: pointer;
+}
+.admin-form-field__select option { background-color: #1a1a1a; }
+.admin-form-field__hint { font-size: 11px; color: #4a4a4a; }
+
+/* ═══════════════════════════════════════════════════════════
+   SKILLS LIST PAGE
+═══════════════════════════════════════════════════════════ */
+
+.admin-skills {
+  display: flex; flex-direction: column; gap: 24px; max-width: 900px;
+}
+
+.admin-skills__header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding-bottom: 20px; border-bottom: 1px solid #1e1e1e;
+}
+.admin-skills__title { font-size: 18px; font-weight: 700; color: #ffffff; letter-spacing: -0.02em; }
+.admin-skills__sub   { font-size: 12px; color: #5a5a5a; margin-top: 2px; }
+
+.admin-skills__table-wrap {
+  border: 1px solid #1e1e1e; border-radius: 9px; overflow: hidden; overflow-x: auto;
+}
+.admin-skills__table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+.admin-skills__th {
+  padding: 11px 16px; text-align: left;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: #484848;
+  background-color: #111111; border-bottom: 1px solid #1e1e1e; white-space: nowrap;
+}
+.admin-skills__th--actions { width: 88px; text-align: center; }
+
+.admin-skills__row {
+  border-bottom: 1px solid #181818; transition: background-color 0.1s ease;
+}
+.admin-skills__row:last-child { border-bottom: none; }
+.admin-skills__row:hover { background-color: #131313; }
+
+.admin-skills__td { padding: 12px 16px; vertical-align: middle; color: #d0d0d0; }
+.admin-skills__td--actions { text-align: center; }
+
+.admin-skills__name { font-weight: 500; color: #e0e0e0; }
+
+.admin-skills__category-badge {
+  display: inline-block; padding: 2px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 500; color: #888888;
+  background-color: #191919; border: 1px solid #272727;
+}
+
+.admin-skills__icon-key {
+  font-family: monospace; font-size: 12px;
+  color: #7a7a7a; background-color: #161616;
+  padding: 2px 7px; border-radius: 4px;
+  border: 1px solid #222222;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SKILL FORM PAGE
+═══════════════════════════════════════════════════════════ */
+
+.admin-skill-form { display: flex; flex-direction: column; gap: 28px; max-width: 600px; }
+
+.admin-skill-form__header { padding-bottom: 20px; border-bottom: 1px solid #1e1e1e; }
+.admin-skill-form__title  { font-size: 18px; font-weight: 700; color: #ffffff; letter-spacing: -0.02em; }
+.admin-skill-form__sub    { font-size: 12px; color: #5a5a5a; margin-top: 4px; }
+
+.admin-skill-form__body   { display: flex; flex-direction: column; gap: 20px; }
+
+.admin-skill-form__actions {
+  display: flex; align-items: center; gap: 10px;
+  padding-top: 8px; border-top: 1px solid #1e1e1e;
+}
