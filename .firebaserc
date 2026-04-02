@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "aditya29mishra-09"
+  },
+  "targets": {
+    "aditya29mishra-09": {
+      "hosting": {
+        "default": [
+          "aditya29mishra-09"
+        ]
+      }
+    }
   }
 }
