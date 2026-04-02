@@ -10,11 +10,10 @@ import { useProgressiveItems } from '../hooks/useProgressiveItems';
 
 const WorkExperience = () => {
   const { timeline, loading, error } = useTimeline();
+  const visibleTimeline = useProgressiveItems(timeline, 4, 4);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
-
-  const visibleTimeline = useProgressiveItems(timeline, 4, 4);
 
   return (
     <>

@@ -24,10 +24,6 @@ const iconMap = {
 
 const Skills = () => {
   const { skills, loading, error } = useSkills();
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error loading data</div>;
-
   const visibleSkills = useProgressiveItems(skills, 6, 6);
 
   // Group skills by category
@@ -38,6 +34,9 @@ const Skills = () => {
       return acc;
     }, {});
   }, [visibleSkills]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
 
   return (
     <div className="skills-container">
