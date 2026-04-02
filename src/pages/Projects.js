@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import projects from "./ProjectsData";
+import { useProjects } from "../hooks/useProjects";
 import ProjectPopup from "./ProjectPopup";
 import "../styles/Projects.css";
 
 const Projects = () => {
 
   const [activeProject,setActiveProject] = useState(null);
+  const { projects, loading, error } = useProjects();
+
+  if (loading) return <div>Loading projects...</div>;
+  if (error) return <div>Error loading projects</div>;
 
   return (
 
