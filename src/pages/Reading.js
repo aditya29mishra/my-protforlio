@@ -1,33 +1,14 @@
 import React from 'react';
 import '../styles/Reading.css';
+import content from '../data/content.json';
+import localAssetMap from '../data/localAssetMap';
 
-// Book data
-const books = [
-  {
-    title: 'Atomic Habits',
-    author: 'James Clear',
-    description: 'An Easy & Proven Way to Build Good Habits & Break Bad Ones.',
-    image: require('../assets/atomicHabits.jpg'), // Replace with actual path or URL
-  },
-  {
-    title: 'Rich Dad Poor Dad',
-    author: 'Robert Kiyosaki',
-    description: 'What the Rich Teach Their Kids About Money.',
-    image: require('../assets/richDadPoorDad.jpg'), // Replace with actual path or URL
-  },
-  {
-    title: 'A Song of Ice and Fire',
-    author: 'George R.R. Martin',
-    description: 'FIRE AND BLOOD is the definitive history of the Targaryens in Westeros.',
-    image: require('../assets/A Song of Ice and Fire.jpg'), // Replace with actual path or URL
-  },
-  {
-    title: 'Harry Potter',
-    author: 'J.K. Rowling',
-    description: 'Harry dreams he will win the competition.',
-    image: require('../assets/Harry Potter.jpg'), // Replace with actual path or URL
-  },
-];
+const books = content.reading.books.map((book) => ({
+  title: book.title,
+  author: book.author,
+  description: book.description,
+  image: localAssetMap[book.media.imageAssetKey]
+}));
 
 const Reading = () => {
   return (

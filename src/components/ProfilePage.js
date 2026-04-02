@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import '../styles/ProfilePage.css';
+import personasData from '../data/personas.json';
 
 import ProfileBanner from './ProfileBanner';
 import TopPicksRow from './TopPicksRow';
@@ -11,7 +12,7 @@ const ProfilePage = () => {
   const backgroundGif = location.state?.backgroundGif || "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif"; // Default GIF
   const { profileName } = useParams();
 
-  const validProfiles = ['recruiter', 'developer', 'stalker', 'adventurer'];
+  const validProfiles = personasData.personas.map((persona) => persona.slug);
   const profile = validProfiles.includes(profileName) ? profileName : 'recruiter';
 
   console.log("Profile Name from useParams:", profileName);

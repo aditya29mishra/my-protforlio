@@ -1,31 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/ContinueWatching.css';
-
-const continueWatchingConfig = {
-  recruiter: [
-    { title: "Music", imgSrc: "https://picsum.photos/id/1025/300/200", link: "/music" },
-    { title: "Reading", imgSrc: "https://picsum.photos/id/1026/300/200", link: "/reading" },
-    { title: "Contact Me", imgSrc: "https://picsum.photos/id/1029/300/200", link: "/contact-me" }
-  ],
-  developer: [
-    { title: "Music", imgSrc: "https://picsum.photos/id/1025/300/200", link: "/music" },
-    { title: "Reading", imgSrc: "https://picsum.photos/id/1026/300/200", link: "/reading" },
-    { title: "Contact Me", imgSrc: "https://picsum.photos/id/1029/300/200", link: "/contact-me" }
-  ],
-  stalker: [
-    { title: "Reading", imgSrc: "https://picsum.photos/id/1026/300/200", link: "/reading" },
-    { title: "Contact Me", imgSrc: "https://picsum.photos/id/1029/300/200", link: "/contact-me" }
-  ],
-  adventurer: [
-    { title: "Music", imgSrc: "https://picsum.photos/id/1025/300/200", link: "/music" },
-    { title: "Reading", imgSrc: "https://picsum.photos/id/1026/300/200", link: "/reading" },
-    { title: "Contact Me", imgSrc: "https://picsum.photos/id/1029/300/200", link: "/contact-me" }
-  ]
-};
+import personasData from '../data/personas.json';
 
 const ContinueWatching = ({ profile }) => {
-  const continueWatching = continueWatchingConfig[profile];
+  const persona = personasData.personas.find((entry) => entry.slug === profile);
+  const groupKey = persona?.recommendationGroups.continueWatching;
+  const continueWatching = (groupKey ? personasData.recommendationGroups.continueWatching[groupKey] : []).map((pick) => ({
+    title: pick.title,
+    imgSrc: pick.media.url,
+    link: pick.route
+  }));
 
   return (
     <div className="continue-watching-row">

@@ -1,32 +1,14 @@
 import React from "react";
 import "../styles/Music.css";
+import content from "../data/content.json";
 
-const songs = [
-  "https://open.spotify.com/embed/track/5W7DOVGQLTigu09afW7QMT?utm_source=generator",
-  "https://open.spotify.com/embed/track/1dGr1c8CrMLDpV6mPbImSI?utm_source=generator",
-  "https://open.spotify.com/embed/track/7fBv7CLKzipRk6EC6TWHOB?utm_source=generator",
-];
+const songs = content.music.songs.map((song) => song.embedUrl);
 
-const albums = [
-  {
-    name: "Top 50 Global",
-    description: "Today's most popular tracks from across the globe.",
-    spotifyLink:
-      "https://open.spotify.com/embed/playlist/37i9dQZEVXbMDoHDwVN2tF?utm_source=generator",
-  },
-  {
-    name: "My Top Songs 2023",
-    description: "Your most played songs of 2023.",
-    spotifyLink:
-      "https://open.spotify.com/embed/playlist/37i9dQZF1Fa1IIVtEpGUcU?utm_source=generator",
-  },
-  {
-    name: "Moonchild Era - Diljit Dosanjh",
-    description: "An album by Diljit Dosanjh full of soulful tracks.",
-    spotifyLink:
-      "https://open.spotify.com/embed/album/0wkGNaTXbbxaD9QjvxlNGE?utm_source=generator",
-  },
-];
+const albums = content.music.collections.map((collection) => ({
+  name: collection.title,
+  description: collection.description,
+  spotifyLink: collection.embedUrl
+}));
 
 const Music = () => {
   return (

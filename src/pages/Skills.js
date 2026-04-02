@@ -38,7 +38,7 @@ const Skills = () => {
           <div className="skills-grid">
             {skillsByCategory[category].map((skill, idx) => (
               <div key={idx} className="skill-card">
-                <div className="icon">{iconMap[skill.icon] || <FaReact />}</div>
+                <div className="icon">{iconMap[skill.iconKey] || <FaReact />}</div>
                 <h3 className="skill-name">
                   {skill.name.split('').map((letter, i) => (
                     <span
