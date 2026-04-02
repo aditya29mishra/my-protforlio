@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { MdUpload } from "react-icons/md";
 import AdminLayout from "../components/AdminLayout";
 import UploadModal from "../components/UploadModal";
+import { useCreateProject, useUpdateProject } from "../hooks/useAdminProjects";
 import "../../styles/AdminProjects.css";
 
 // Exact DB schema fields for public.projects (write layer)
@@ -24,6 +25,10 @@ const ProjectForm = () => {
   const { id } = useParams();            // present on /admin/projects/:id
   const navigate = useNavigate();
   const isEditing = Boolean(id);         // /projects/new → no id → create mode
+
+  const createMutation = useCreateProject();
+  const updateMutation = useUpdateProject();
+  const isSaving = createMutation.isPending || updateMutation.isPending;
 
   // Media system integration state
   const [isUploadOpen, setIsUploadOpen] = useState(false);
@@ -52,10 +57,28 @@ const ProjectForm = () => {
   const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
-      // Phase 2: call createProject / updateProject from admin service here
-      console.log("Form submitted", form);
+
+      const payload = {
+        title: form.title,
+        description: form.description,
+        image_media_id: form.image_media_id,
+        github_url: form.github_url,
+        youtube_video_id: form.youtube_video_id,
+        status: form.status,
+      };
+
+      if (isEditing) {
+        updateMutation.mutate(
+          { id, projectData: payload },
+          { onSuccess: () => navigate("/admin/projects") }
+        );
+      } else {
+        createMutation.mutate(payload, {
+          onSuccess: () => navigate("/admin/projects")
+        });
+      }
     },
-    [form]
+    [form, isEditing, id, updateMutation, createMutation, navigate]
   );
 
   return (
@@ -203,8 +226,9 @@ const ProjectForm = () => {
               id="admin-project-save-btn"
               type="submit"
               className="admin-btn admin-btn--primary"
+              disabled={isSaving}
             >
-              {isEditing ? "Save Changes" : "Create Project"}
+              {isSaving ? "Saving..." : (isEditing ? "Save Changes" : "Create Project")}
             </button>
             <button
               id="admin-project-cancel-btn"
