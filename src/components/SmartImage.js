@@ -53,9 +53,11 @@ const SmartImage = ({
   const latestSourceRef = useRef(src);
   const [shouldLoad, setShouldLoad] = useState(priority || seenSources.has(src));
   const [isLoaded, setIsLoaded] = useState(seenSources.has(src));
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     latestSourceRef.current = src;
+    setHasError(false);
   }, [src]);
 
   useEffect(() => {
@@ -94,7 +96,11 @@ const SmartImage = ({
     if (latestSourceRef.current) {
       seenSources.add(latestSourceRef.current);
     }
+    setIsLoaded(true);
+  }, []);
 
+  const handleError = useCallback(() => {
+    setHasError(true);
     setIsLoaded(true);
   }, []);
 
@@ -112,7 +118,7 @@ const SmartImage = ({
       style={wrapperStyle}
     >
       {!isLoaded && <div className="smart-image__skeleton" aria-hidden="true" />}
-      {shouldLoad && src ? (
+      {shouldLoad && src && !hasError ? (
         <img
           src={src}
           alt={alt}
@@ -122,8 +128,13 @@ const SmartImage = ({
           fetchPriority={priority ? "high" : "auto"}
           sizes={sizes}
           onLoad={handleLoad}
-          onError={handleLoad}
+          onError={handleError}
         />
+      ) : null}
+      {shouldLoad && (hasError || !src) ? (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#2a2a2a', width: '100%', height: '100%', color: '#666', fontSize: '24px', borderRadius: 'inherit' }}>
+          🚫
+        </div>
       ) : null}
     </div>
   );
