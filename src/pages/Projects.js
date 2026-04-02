@@ -20,7 +20,7 @@ const Projects = () => {
         {projects.map((project,index)=>(
           
           <div
-            key={index}
+            key={project.id || project.slug || index}
             className="project-card"
             tabIndex="0"
 
@@ -38,6 +38,7 @@ const Projects = () => {
               src={project.image}
               alt={project.title}
               className="project-image"
+              loading="lazy"
             />
 
             <div className="project-title">

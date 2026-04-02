@@ -24,6 +24,7 @@ const Contact = () => {
                     src={avatar}
                     alt="Aditya's Avatar"
                     className="badge-avatar"
+                    loading="lazy"
                 />
                 <div className="badge-content">
                     <h3 className="badge-name">{contactDetails.name}</h3>

@@ -1,24 +1,5 @@
 import { supabase } from "./supabaseClient";
-
-function resolveMediaUrl(media) {
-  if (!media) {
-    return "";
-  }
-
-  if (media.source_type === "external") {
-    return media.external_url || "";
-  }
-
-  if (media.storage_bucket && media.storage_path) {
-    const { data } = supabase.storage
-      .from(media.storage_bucket)
-      .getPublicUrl(media.storage_path);
-
-    return data?.publicUrl || "";
-  }
-
-  return "";
-}
+import { resolveMediaUrl } from "./mediaUtils";
 
 function mapMedia(media) {
   return {
@@ -70,18 +51,32 @@ function mapRecommendationGroups(recommendations, mediaById) {
 }
 
 export async function fetchPersonas() {
-  const [personasResult, recommendationsResult, mediaResult] = await Promise.all(
-    [
-      supabase.from("personas").select("*").order("sort_order"),
-      supabase
-        .from("persona_recommendations")
-        .select("*")
-        .order("slot_group")
-        .order("recommendation_group_key")
-        .order("sort_order"),
-      supabase.from("media").select("*"),
-    ]
-  );
+  const [personasResult, recommendationsResult] = await Promise.all([
+    supabase
+      .from("personas")
+      .select(`
+        slug,
+        label,
+        avatar_media_id,
+        background_media_id,
+        top_picks_group_key,
+        continue_watching_group_key
+      `)
+      .order("sort_order"),
+    supabase
+      .from("persona_recommendations")
+      .select(`
+        slot_group,
+        recommendation_group_key,
+        title,
+        route,
+        icon_key,
+        media_id
+      `)
+      .order("slot_group")
+      .order("recommendation_group_key")
+      .order("sort_order"),
+  ]);
 
   if (personasResult.error) {
     throw personasResult.error;
@@ -89,6 +84,27 @@ export async function fetchPersonas() {
 
   if (recommendationsResult.error) {
     throw recommendationsResult.error;
+  }
+
+  const mediaIds = [
+    ...new Set(
+      [...(personasResult.data || []), ...(recommendationsResult.data || [])]
+        .flatMap((item) => [
+          item.avatar_media_id,
+          item.background_media_id,
+          item.media_id,
+        ])
+        .filter(Boolean)
+    ),
+  ];
+
+  let mediaResult = { data: [], error: null };
+
+  if (mediaIds.length > 0) {
+    mediaResult = await supabase
+      .from("media")
+      .select("id, source_type, storage_bucket, storage_path, external_url")
+      .in("id", mediaIds);
   }
 
   if (mediaResult.error) {

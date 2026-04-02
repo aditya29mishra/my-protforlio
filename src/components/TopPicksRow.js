@@ -21,7 +21,7 @@ const TopPicksRow = ({ profile, picks = [] }) => {
             onClick={() => navigate(pick.route)}
             style={{ animationDelay: `${index * 0.2}s` }} // Adding delay based on index
           >
-            <img src={pick.media.url} alt={pick.title} className="pick-image" />
+            <img src={pick.media.url} alt={pick.title} className="pick-image" loading="lazy" />
             <div className="overlay">
               <div className="pick-label">{pick.title}</div>
             </div>

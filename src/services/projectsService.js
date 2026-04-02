@@ -1,24 +1,5 @@
 import { supabase } from "./supabaseClient";
-
-function resolveMediaUrl(media) {
-  if (!media) {
-    return "";
-  }
-
-  if (media.source_type === "external") {
-    return media.external_url || "";
-  }
-
-  if (media.storage_bucket && media.storage_path) {
-    const { data } = supabase.storage
-      .from(media.storage_bucket)
-      .getPublicUrl(media.storage_path);
-
-    return data?.publicUrl || "";
-  }
-
-  return "";
-}
+import { resolveMediaUrl } from "./mediaUtils";
 
 function mapProjectRecord(project) {
   const tags = [...(project.project_skill_tags || [])].sort(
@@ -44,14 +25,23 @@ export async function fetchProjects() {
   const { data, error } = await supabase
     .from("projects")
     .select(`
-      *,
+      id,
+      slug,
+      title,
+      description,
+      github_url,
+      youtube_video_id,
       project_skill_tags (
-        id,
         label,
         sort_order,
-        skill:skills!project_skill_tags_skill_id_fkey (*)
+        skill:skills!project_skill_tags_skill_id_fkey (name)
       ),
-      media:media!projects_image_media_id_fkey (*)
+      media:media!projects_image_media_id_fkey (
+        source_type,
+        storage_bucket,
+        storage_path,
+        external_url
+      )
     `)
     .eq("status", "published")
     .order("sort_order");

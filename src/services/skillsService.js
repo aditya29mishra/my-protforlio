@@ -1,5 +1,4 @@
 import { supabase } from "./supabaseClient";
-import skillsData from "../pages/skillsData";
 
 function mapSkillRecord(skill) {
   return {
@@ -12,23 +11,15 @@ function mapSkillRecord(skill) {
   };
 }
 
-function shouldUseFallback(error) {
-  return error?.code === "PGRST205";
-}
-
 export async function fetchSkills() {
   const { data, error } = await supabase
     .from("skills")
-    .select("*")
+    .select("id, slug, name, category, description, icon_key")
     .eq("is_active", true)
     .order("category")
     .order("sort_order");
 
   if (error) {
-    if (shouldUseFallback(error)) {
-      return skillsData;
-    }
-
     throw error;
   }
 

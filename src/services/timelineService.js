@@ -1,5 +1,4 @@
 import { supabase } from "./supabaseClient";
-import { getTimeline } from "../pages/getTimeline";
 
 function mapTimelineRecord(entry) {
   return {
@@ -14,22 +13,23 @@ function mapTimelineRecord(entry) {
   };
 }
 
-function shouldUseFallback(error) {
-  return error?.code === "PGRST205";
-}
-
 export async function fetchTimeline() {
   const { data, error } = await supabase
     .from("timeline_entries")
-    .select("*")
+    .select(`
+      id,
+      slug,
+      organization_name,
+      entry_type,
+      role_title,
+      tech_stack,
+      summary,
+      date_range
+    `)
     .eq("is_active", true)
     .order("sort_order");
 
   if (error) {
-    if (shouldUseFallback(error)) {
-      return getTimeline();
-    }
-
     throw error;
   }
 

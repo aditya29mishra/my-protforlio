@@ -1,16 +1,13 @@
 import React from "react";
 import "../styles/Music.css";
-import content from "../data/content.json";
-
-const songs = content.music.songs.map((song) => song.embedUrl);
-
-const albums = content.music.collections.map((collection) => ({
-  name: collection.title,
-  description: collection.description,
-  spotifyLink: collection.embedUrl
-}));
+import { useMusicContent } from "../hooks/useMusicContent";
 
 const Music = () => {
+  const { songs, collections, loading, error } = useMusicContent();
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
+
   return (
     <div className="music-page">
       <h1 className="music-title">My Spotify Music</h1>
@@ -24,9 +21,10 @@ const Music = () => {
         <div className="songs-grid">
           {songs.map((song, index) => (
             <iframe
-              key={index}
+              key={song.slug || index}
+              title={`Spotify song ${index + 1}`}
               className="spotify-player"
-              src={song}
+              src={song.embedUrl}
               width="250"
               height="80"
               frameBorder="0"
@@ -41,10 +39,11 @@ const Music = () => {
       <div className="albums-section">
         <h2>Albums & Playlists</h2>
         <div className="albums">
-          {albums.map((album, index) => (
-            <div className="album-card" key={index}>
+          {collections.map((album, index) => (
+            <div className="album-card" key={album.slug || index}>
               <iframe
-                src={album.spotifyLink}
+                title={album.title}
+                src={album.embedUrl}
                 width="250"
                 height="200"
                 frameBorder="0"
@@ -52,7 +51,7 @@ const Music = () => {
                 loading="lazy"
               ></iframe>
               <div className="album-details">
-                <h4>{album.name}</h4>
+                <h4>{album.title}</h4>
                 <p>{album.description}</p>
               </div>
             </div>

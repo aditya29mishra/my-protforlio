@@ -1,16 +1,13 @@
 import React from 'react';
 import '../styles/Reading.css';
-import content from '../data/content.json';
-import localAssetMap from '../data/localAssetMap';
-
-const books = content.reading.books.map((book) => ({
-  title: book.title,
-  author: book.author,
-  description: book.description,
-  image: localAssetMap[book.media.imageAssetKey]
-}));
+import { useReadingContent } from '../hooks/useReadingContent';
 
 const Reading = () => {
+  const { books, loading, error } = useReadingContent();
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
+
   return (
     <div className="reading-container">
       <h1 className="reading-title">Books to Read</h1>
@@ -18,8 +15,8 @@ const Reading = () => {
 
       <div className="books-grid">
         {books.map((book, index) => (
-          <div key={index} className="book-card">
-            <img src={book.image} alt={book.title} className="book-cover" />
+          <div key={book.slug || index} className="book-card">
+            <img src={book.image} alt={book.alt} className="book-cover" loading="lazy" />
             <div className="book-info">
               <h2 className="book-title">{book.title}</h2>
               <p className="book-author">{book.author}</p>
