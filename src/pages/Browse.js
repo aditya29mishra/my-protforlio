@@ -1,30 +1,32 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProfileCard from '../components/ProfileCard';
-import personasData from '../data/personas.json';
-import localAssetMap from '../data/localAssetMap';
+import { usePersona } from '../hooks/usePersona';
 import '../styles/browse.css';
 
 const Browse = () => {
   const navigate = useNavigate();
+  const { personas, loading, error } = usePersona();
 
-  const profiles = personasData.personas.map((persona) => ({
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
+
+  const profiles = personas.map((persona) => ({
     name: persona.slug,
-    image: localAssetMap[persona.media.avatarImageKey],
-    backgroundGif: persona.media.background.url
+    image: persona.media.avatar.url,
   }));
 
   const handleProfileClick = (profile) => {
-    navigate(`/profile/${profile.name}`, { state: { profileImage: profile.image, backgroundGif: profile.backgroundGif } });
+    navigate(`/profile/${profile.name}`);
   };
 
   return (
     <div className="browse-container">
       <p className='who-is-watching'>Who's Watching?</p>
       <div className="profiles">
-        {profiles.map((profile, index) => (
+        {profiles.map((profile) => (
           <ProfileCard
-            key={index}
+            key={profile.name}
             name={profile.name}
             image={profile.image}
             onClick={() => handleProfileClick(profile)}

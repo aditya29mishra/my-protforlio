@@ -1,22 +1,28 @@
 import React from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import '../styles/ProfilePage.css';
-import personasData from '../data/personas.json';
+import { usePersona } from '../hooks/usePersona';
 
 import ProfileBanner from './ProfileBanner';
 import TopPicksRow from './TopPicksRow';
 import ContinueWatching from './ContinueWatching';
 
+const DEFAULT_BACKGROUND_GIF = "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif";
+
 const ProfilePage = () => {
-  const location = useLocation();
-  const backgroundGif = location.state?.backgroundGif || "https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif"; // Default GIF
   const { profileName } = useParams();
+  const { personasData, persona, profile, loading, error } = usePersona(profileName);
 
-  const validProfiles = personasData.personas.map((persona) => persona.slug);
-  const profile = validProfiles.includes(profileName) ? profileName : 'recruiter';
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
 
-  console.log("Profile Name from useParams:", profileName);
-  console.log("Validated Profile:", profile);
+  const backgroundGif = persona?.media.background.url || DEFAULT_BACKGROUND_GIF;
+  const topPicks = persona?.recommendationGroups.topPicks
+    ? personasData.recommendationGroups.topPicks[persona.recommendationGroups.topPicks] || []
+    : [];
+  const continueWatching = persona?.recommendationGroups.continueWatching
+    ? personasData.recommendationGroups.continueWatching[persona.recommendationGroups.continueWatching] || []
+    : [];
 
   return (
     <>
@@ -26,8 +32,8 @@ const ProfilePage = () => {
       >
         <ProfileBanner />
       </div>
-      <TopPicksRow profile={profile} />
-      <ContinueWatching profile={profile} />
+      <TopPicksRow profile={profile} picks={topPicks} />
+      <ContinueWatching profile={profile} picks={continueWatching} />
     </>
   );
 };
