@@ -86,7 +86,7 @@ const App = () => {
   return (
     <ErrorBoundary fallback={<FallbackUI />}>
       <AppWarmup />
-      <Router>
+      <Router basename="/">
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             {/* Routes without Navbar */}
