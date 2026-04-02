@@ -1,5 +1,6 @@
 import React, { lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const AdminLogin    = lazy(() => import("../pages/AdminLogin"));
 const Dashboard     = lazy(() => import("../pages/Dashboard"));
@@ -23,22 +24,24 @@ const AdminRoutes = () => {
       <Route path="login" element={<AdminLogin />} />
 
       {/* /admin/dashboard (ProtectedRoute wired in Phase 1F) */}
-      <Route path="dashboard" element={<Dashboard />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="dashboard" element={<Dashboard />} />
 
-      {/* ── Projects module ──────────────────────────────── */}
-      <Route path="projects"     element={<ProjectsPage />} />
-      <Route path="projects/new" element={<ProjectForm />} />
-      <Route path="projects/:id" element={<ProjectForm />} />
+        {/* ── Projects module ──────────────────────────────── */}
+        <Route path="projects"     element={<ProjectsPage />} />
+        <Route path="projects/new" element={<ProjectForm />} />
+        <Route path="projects/:id" element={<ProjectForm />} />
 
-      {/* ── Skills module ─────────────────────────────────── */}
-      <Route path="skills"     element={<SkillsPage />} />
-      <Route path="skills/new" element={<SkillForm />} />
-      <Route path="skills/:id" element={<SkillForm />} />
+        {/* ── Skills module ─────────────────────────────────── */}
+        <Route path="skills"     element={<SkillsPage />} />
+        <Route path="skills/new" element={<SkillForm />} />
+        <Route path="skills/:id" element={<SkillForm />} />
 
-      {/* ── Timeline module ───────────────────────────────── */}
-      <Route path="timeline"     element={<TimelinePage />} />
-      <Route path="timeline/new" element={<TimelineForm />} />
-      <Route path="timeline/:id" element={<TimelineForm />} />
+        {/* ── Timeline module ───────────────────────────────── */}
+        <Route path="timeline"     element={<TimelinePage />} />
+        <Route path="timeline/new" element={<TimelineForm />} />
+        <Route path="timeline/:id" element={<TimelineForm />} />
+      </Route>
 
       {/* Catch-all: any unknown /admin/* path → login */}
       <Route path="*" element={<Navigate to="login" replace />} />

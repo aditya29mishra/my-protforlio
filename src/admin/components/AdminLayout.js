@@ -1,5 +1,6 @@
-import React, { memo } from "react";
-import { NavLink } from "react-router-dom";
+import React, { memo, useCallback } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { logoutAdmin } from "../../services/admin/authAdminService";
 import {
   MdDashboard,
   MdFolderOpen,
@@ -19,6 +20,17 @@ const NAV_ITEMS = [
 ];
 
 const AdminLayout = ({ children, title = "Admin Panel" }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await logoutAdmin();
+      navigate("/admin/login", { replace: true });
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  }, [navigate]);
+
   return (
     <div className="admin-layout">
 
@@ -53,8 +65,8 @@ const AdminLayout = ({ children, title = "Admin Panel" }) => {
             id="admin-logout-btn"
             className="admin-layout__logout-btn"
             type="button"
-            disabled
-            title="Logout (Phase 1F)"
+            onClick={handleLogout}
+            title="Logout"
           >
             <MdLogout className="admin-layout__nav-icon" aria-hidden="true" />
             <span>Logout</span>
