@@ -17,6 +17,8 @@ const ThreeDChess = lazy(() => import("./games/ThreeDChess"));
 const SnakeGame = lazy(() => import("./games/snakegame/SnakeRaceGame"));
 const VirtualShootingRange = lazy(() => import("./games/VirtualShootingRange"));
 const SpaceExploration = lazy(() => import("./games/SpaceExploration"));
+// Admin system — isolated bundle, loaded only when /admin/* is visited
+const AdminApp = lazy(() => import("./admin/AdminApp"));
 
 const FallbackUI = () => <div>Something went wrong.</div>;
 
@@ -105,6 +107,9 @@ const App = () => {
             <Route path="/game/developer" element={<Layout><ThreeDChess /></Layout>} />
             <Route path="/game/stalker" element={<Layout><VirtualShootingRange /></Layout>} />
             <Route path="/game/adventure" element={<Layout><SpaceExploration /></Layout>} />
+
+            {/* Admin system — wildcard hands all /admin/* subroutes to AdminApp */}
+            <Route path="/admin/*" element={<AdminApp />} />
           </Routes>
         </Suspense>
       </Router>

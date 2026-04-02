@@ -1,7 +1,7 @@
 import React, { memo, Suspense } from "react";
-import { BrowserRouter } from "react-router-dom";
 import AdminRoutes from "./routes/AdminRoutes";
 
+// Minimal fallback rendered while lazy admin pages resolve
 const AdminLoadingFallback = () => (
   <div
     style={{
@@ -20,13 +20,13 @@ const AdminLoadingFallback = () => (
   </div>
 );
 
+// NOTE: No BrowserRouter here — App.js owns the single router instance.
+// AdminApp is mounted inside App.js's <Routes>, so it inherits the router context.
 const AdminApp = () => {
   return (
-    <BrowserRouter>
-      <Suspense fallback={<AdminLoadingFallback />}>
-        <AdminRoutes />
-      </Suspense>
-    </BrowserRouter>
+    <Suspense fallback={<AdminLoadingFallback />}>
+      <AdminRoutes />
+    </Suspense>
   );
 };
 
