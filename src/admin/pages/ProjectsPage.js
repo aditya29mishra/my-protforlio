@@ -2,29 +2,8 @@ import React, { memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdAdd, MdEdit, MdDelete, MdOpenInNew } from "react-icons/md";
 import AdminLayout from "../components/AdminLayout";
+import { useAdminProjects, useDeleteProject } from "../hooks/useAdminProjects";
 import "../../styles/AdminProjects.css";
-
-// Placeholder rows — replaced by real data once hooks are wired (Phase 2)
-const PLACEHOLDER_ROWS = [
-  {
-    id: "1",
-    title: "Portfolio Website",
-    status: "published",
-    github_url: "https://github.com/example/portfolio",
-  },
-  {
-    id: "2",
-    title: "Snake Race Game",
-    status: "published",
-    github_url: "",
-  },
-  {
-    id: "3",
-    title: "Space Exploration App",
-    status: "draft",
-    github_url: "https://github.com/example/space",
-  },
-];
 
 const StatusBadge = memo(({ status }) => (
   <span className={`admin-projects__badge admin-projects__badge--${status}`}>
@@ -34,6 +13,8 @@ const StatusBadge = memo(({ status }) => (
 
 const ProjectsPage = () => {
   const navigate = useNavigate();
+  const { data: projects = [], isLoading } = useAdminProjects();
+  const deleteMutation = useDeleteProject();
 
   const handleCreateNew = useCallback(() => {
     navigate("/admin/projects/new");
@@ -45,6 +26,21 @@ const ProjectsPage = () => {
     },
     [navigate]
   );
+
+  const handleDelete = useCallback((id) => {
+    if (window.confirm("Are you sure you want to delete this project?")) {
+      deleteMutation.mutate(id);
+    }
+  }, [deleteMutation]);
+
+  if (isLoading) {
+    return (
+      <AdminLayout title="Projects">
+        <div style={{ padding: "32px", color: "#888" }}>Loading projects...</div>
+      </AdminLayout>
+    );
+  }
+
   return (
     <AdminLayout title="Projects">
       <div className="admin-projects">
@@ -79,67 +75,78 @@ const ProjectsPage = () => {
               </tr>
             </thead>
             <tbody>
-              {PLACEHOLDER_ROWS.map((project) => (
-                <tr key={project.id} className="admin-projects__row">
-
-                  {/* Image thumbnail */}
-                  <td className="admin-projects__td">
-                    <div
-                      className="admin-projects__thumb"
-                      aria-label="Project image placeholder"
-                    />
+              {!projects.length ? (
+                <tr>
+                  <td colSpan="5" style={{ padding: "24px", textAlign: "center", color: "#666" }}>
+                    No projects found
                   </td>
-
-                  {/* Title */}
-                  <td className="admin-projects__td">
-                    <span className="admin-projects__project-title">
-                      {project.title}
-                    </span>
-                  </td>
-
-                  {/* Status */}
-                  <td className="admin-projects__td">
-                    <StatusBadge status={project.status} />
-                  </td>
-
-                  {/* GitHub */}
-                  <td className="admin-projects__td">
-                    {project.github_url ? (
-                      <a
-                        href={project.github_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="admin-projects__link"
-                      >
-                        <MdOpenInNew aria-hidden="true" />
-                        View
-                      </a>
-                    ) : (
-                      <span className="admin-projects__empty">—</span>
-                    )}
-                  </td>
-
-                  {/* Actions */}
-                  <td className="admin-projects__td admin-projects__td--actions">
-                    <button
-                      type="button"
-                      className="admin-icon-btn admin-icon-btn--edit"
-                      onClick={() => handleEdit(project.id)}
-                      aria-label={`Edit ${project.title}`}
-                    >
-                      <MdEdit aria-hidden="true" />
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-icon-btn admin-icon-btn--delete"
-                      aria-label={`Delete ${project.title}`}
-                    >
-                      <MdDelete aria-hidden="true" />
-                    </button>
-                  </td>
-
                 </tr>
-              ))}
+              ) : (
+                projects.map((project) => (
+                  <tr key={project.id} className="admin-projects__row">
+                    {/* Image thumbnail */}
+                    <td className="admin-projects__td">
+                      {project.image_media_id ? (
+                        <div className="admin-projects__thumb" style={{ backgroundColor: "#222", fontSize: "10px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {project.image_media_id.substring(0, 8)}...
+                        </div>
+                      ) : (
+                        <div className="admin-projects__thumb" aria-label="Project image placeholder" />
+                      )}
+                    </td>
+
+                    {/* Title */}
+                    <td className="admin-projects__td">
+                      <span className="admin-projects__project-title">
+                        {project.title}
+                      </span>
+                    </td>
+
+                    {/* Status */}
+                    <td className="admin-projects__td">
+                      <StatusBadge status={project.status} />
+                    </td>
+
+                    {/* GitHub */}
+                    <td className="admin-projects__td">
+                      {project.github_url ? (
+                        <a
+                          href={project.github_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="admin-projects__link"
+                        >
+                          <MdOpenInNew aria-hidden="true" />
+                          View
+                        </a>
+                      ) : (
+                        <span className="admin-projects__empty">—</span>
+                      )}
+                    </td>
+
+                    {/* Actions */}
+                    <td className="admin-projects__td admin-projects__td--actions">
+                      <button
+                        type="button"
+                        className="admin-icon-btn admin-icon-btn--edit"
+                        onClick={() => handleEdit(project.id)}
+                        aria-label={`Edit ${project.title}`}
+                      >
+                        <MdEdit aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-icon-btn admin-icon-btn--delete"
+                        onClick={() => handleDelete(project.id)}
+                        aria-label={`Delete ${project.title}`}
+                        disabled={deleteMutation.isPending}
+                      >
+                        <MdDelete aria-hidden="true" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
