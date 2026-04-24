@@ -12,12 +12,12 @@ function mapProjectRecord(project) {
     slug: project.slug,
     title: project.title,
     description: project.description,
-    techUsed: tags
+    techStack: tags
       .map((tag) => tag.label || tag.skill?.name)
       .filter(Boolean)
       .join(", "),
     image: resolveMediaUrl(media),
-    github: project.github_url,
+    route: project.github_url || "#",
     video: project.youtube_video_id,
   };
 }

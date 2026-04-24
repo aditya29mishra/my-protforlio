@@ -1,117 +1,52 @@
-import React, { Suspense, lazy, useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+// Redesign Initialized - SPS Layout
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
 import ErrorBoundary from "./components/ErrorBoundary";
+import StarsCanvas from "./components/canvas/StarsCanvas";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import About from "./components/About";
+import Experience from "./components/Experience";
+import Tech from "./components/Tech";
+import Works from "./components/Works";
+import Contact from "./components/Contact";
 
-const NetflixTitle = lazy(() => import("./pages/NetflixTitle"));
-const Browse = lazy(() => import("./pages/Browse"));
-const ProfilePage = lazy(() => import("./components/ProfilePage"));
-const Skills = lazy(() => import("./pages/Skills"));
-const Projects = lazy(() => import("./pages/Projects"));
-const WorkExperience = lazy(() => import("./pages/WorkExperience"));
-const Contact = lazy(() => import("./pages/Contact"));
+// Lazy load secondary routes
 const Music = lazy(() => import("./pages/Music"));
 const Reading = lazy(() => import("./pages/Reading"));
-const ThreeDChess = lazy(() => import("./games/ThreeDChess"));
-const SnakeGame = lazy(() => import("./games/snakegame/SnakeRaceGame"));
-const VirtualShootingRange = lazy(() => import("./games/VirtualShootingRange"));
-const SpaceExploration = lazy(() => import("./games/SpaceExploration"));
-// Admin system — isolated bundle, loaded only when /admin/* is visited
-const AdminApp = lazy(() => import("./admin/AdminApp"));
-
-const FallbackUI = () => <div>Something went wrong.</div>;
-
-const AppWarmup = () => {
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    let isActive = true;
-
-    const loadPrimaryData = async () => {
-      const [{ personasQueryOptions }, { projectsQueryOptions }] =
-        await Promise.all([
-          import("./hooks/usePersona"),
-          import("./hooks/useProjects"),
-        ]);
-
-      if (!isActive) {
-        return;
-      }
-
-      queryClient.prefetchQuery(personasQueryOptions);
-      queryClient.prefetchQuery(projectsQueryOptions);
-    };
-
-    const loadSecondaryData = async () => {
-      const [{ skillsQueryOptions }, { timelineQueryOptions }] =
-        await Promise.all([
-          import("./hooks/useSkills"),
-          import("./hooks/useTimeline"),
-        ]);
-
-      if (!isActive) {
-        return;
-      }
-
-      queryClient.prefetchQuery(skillsQueryOptions);
-      queryClient.prefetchQuery(timelineQueryOptions);
-    };
-
-    loadPrimaryData();
-
-    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-      const idleId = window.requestIdleCallback(loadSecondaryData, {
-        timeout: 600,
-      });
-
-      return () => {
-        isActive = false;
-        window.cancelIdleCallback(idleId);
-      };
-    }
-
-    const timeoutId = window.setTimeout(loadSecondaryData, 120);
-
-    return () => {
-      isActive = false;
-      window.clearTimeout(timeoutId);
-    };
-  }, [queryClient]);
-
-  return null;
-};
+const DummyBento = lazy(() => import("./pages/DummyBento"));
 
 const App = () => {
   return (
-    <ErrorBoundary fallback={<FallbackUI />}>
-      <AppWarmup />
+    <ErrorBoundary fallback={<div>Something went wrong.</div>}>
       <Router basename="/">
-        <Suspense fallback={<div>Loading...</div>}>
-          <Routes>
-            {/* Routes without Navbar */}
-            <Route path="/" element={<NetflixTitle />} />
-            <Route path="/browse" element={<Browse />} />
+        <div className="relative z-0 bg-primary">
+          <div className="bg-hero-pattern bg-cover bg-no-repeat bg-center">
+            <Navbar />
+            <Hero />
+          </div>
+          
+          <About />
+          <Experience />
+          <Tech />
+          <Works />
+          
+          <div className="relative z-0">
+            <Contact />
+          </div>
 
-            {/* Routes with Layout */}
-            <Route path="/profile/:profileName" element={<Layout><ProfilePage /></Layout>} />
-            <Route path="/skills" element={<Layout><Skills /></Layout>} />
-            <Route path="/projects" element={<Layout><Projects /></Layout>} />
-            <Route path="/work-experience" element={<Layout><WorkExperience /></Layout>} />
-            <Route path="/contact-me" element={<Layout><Contact /></Layout>} />
-            <Route path="/music" element={<Layout><Music /></Layout>} />
-            <Route path="/reading" element={<Layout><Reading /></Layout>} />
-
-            {/* Game Routes */}
-            <Route path="/game/recruiter" element={<Layout><SnakeGame /></Layout>} />
-            <Route path="/game/developer" element={<Layout><ThreeDChess /></Layout>} />
-            <Route path="/game/stalker" element={<Layout><VirtualShootingRange /></Layout>} />
-            <Route path="/game/adventure" element={<Layout><SpaceExploration /></Layout>} />
-
-            {/* Admin system — wildcard hands all /admin/* subroutes to AdminApp */}
-            <Route path="/admin/*" element={<AdminApp />} />
-          </Routes>
-        </Suspense>
+          {/* Secondary Routes / Misc */}
+          <Suspense fallback={null}>
+            <Routes>
+              <Route path="/music" element={<Music />} />
+              <Route path="/reading" element={<Reading />} />
+              <Route path="/dummy-bento" element={<DummyBento />} />
+              {/* Catch-all or Home could be defined here if needed, 
+                  but our main landing is static above the Routes */}
+            </Routes>
+          </Suspense>
+          <StarsCanvas />
+        </div>
       </Router>
     </ErrorBoundary>
   );

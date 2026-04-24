@@ -6,7 +6,7 @@ function mapTimelineRecord(entry) {
     slug: entry.slug,
     name: entry.organization_name,
     timelineType: entry.entry_type,
-    title: entry.role_title,
+    title: entry.role_title?.replace("Devloper", "Developer"),
     techStack: entry.tech_stack,
     summaryPoints: entry.summary,
     dateRange: entry.date_range,
